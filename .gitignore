@@ -7,8 +7,14 @@
 .env.local
 .env.development
 .env.production
+.env.dev
+.env.prod
 .env.*.secrets
 *.secrets
+
+# Database credentials files
+database-credentials-*.txt
+.db-config.env
 
 # Logs
 logs/
@@ -35,6 +41,8 @@ Thumbs.db
 
 # KEEP the example/template files
 !.env.example
+!.env.dev.example
+!.env.prod.example
 
 # IDE files
 .vscode/

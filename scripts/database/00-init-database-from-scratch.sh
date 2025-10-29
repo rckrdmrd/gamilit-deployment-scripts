@@ -44,7 +44,7 @@ DATABASE_DIR="$PROJECT_ROOT/database"
 DDL_DIR="$DATABASE_DIR/gamilit_platform"
 SETUP_DIR="$DATABASE_DIR/setup"
 SEED_DIR="$DDL_DIR/seed-data"
-BACKEND_DIR="$PROJECT_ROOT/../backend"
+BACKEND_DIR="$PROJECT_ROOT/../gamilit-platform-backend"
 
 # ============================================================================
 # FUNCIONES DE UTILIDAD
