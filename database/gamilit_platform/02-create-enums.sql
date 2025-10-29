@@ -5,6 +5,30 @@
 -- =====================================================
 
 -- ============================================
+-- PUBLIC ENUMS (Used across multiple schemas)
+-- ============================================
+
+-- System roles
+CREATE TYPE public.gamilit_role AS ENUM (
+    'student',
+    'admin_teacher',
+    'super_admin'
+);
+
+COMMENT ON TYPE public.gamilit_role IS 'Roles del sistema: estudiante, profesor administrador y super administrador';
+
+-- Maya ranks for gamification
+CREATE TYPE public.maya_rank AS ENUM (
+    'NACOM',
+    'BATAB',
+    'HOLCATTE',
+    'GUERRERO',
+    'MERCENARIO'
+);
+
+COMMENT ON TYPE public.maya_rank IS 'Rangos jerárquicos mayas: NACOM (máximo), BATAB, HOLCATTE, GUERRERO, MERCENARIO (inicial)';
+
+-- ============================================
 -- AUTH MANAGEMENT ENUMS
 -- ============================================
 
