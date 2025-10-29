@@ -31,7 +31,7 @@ CREATE TABLE educational_content.assessment_rubrics (
     CONSTRAINT rubric_reference_check CHECK ((((exercise_id IS NOT NULL) AND (module_id IS NULL)) OR ((exercise_id IS NULL) AND (module_id IS NOT NULL))))
 );
 
-ALTER TABLE educational_content.assessment_rubrics OWNER TO postgres;
+ALTER TABLE educational_content.assessment_rubrics OWNER TO gamilit_user;
 
 -- Primary Key
 ALTER TABLE ONLY educational_content.assessment_rubrics

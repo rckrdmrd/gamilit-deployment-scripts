@@ -43,5 +43,5 @@ COMMENT ON COLUMN auth_management.security_events.severity IS 'Severity level: l
 COMMENT ON COLUMN auth_management.security_events.metadata IS 'Additional event data in JSON format';
 
 -- Permissions
-ALTER TABLE auth_management.security_events OWNER TO postgres;
+ALTER TABLE auth_management.security_events OWNER TO gamilit_user;
 GRANT ALL ON TABLE auth_management.security_events TO gamilit_user;

@@ -50,5 +50,5 @@ COMMENT ON TABLE auth_management.user_roles IS 'Asignaciones de roles a usuarios
 COMMENT ON COLUMN auth_management.user_roles.permissions IS 'Permisos específicos asociados a este rol';
 
 -- Permissions
-ALTER TABLE auth_management.user_roles OWNER TO postgres;
+ALTER TABLE auth_management.user_roles OWNER TO gamilit_user;
 GRANT ALL ON TABLE auth_management.user_roles TO gamilit_user;

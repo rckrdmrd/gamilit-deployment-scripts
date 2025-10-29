@@ -40,7 +40,7 @@ CREATE TABLE gamification_system.notifications (
 );
 
 
-ALTER TABLE gamification_system.notifications OWNER TO postgres;
+ALTER TABLE gamification_system.notifications OWNER TO gamilit_user;
 
 --
 -- Name: TABLE notifications; Type: COMMENT; Schema: gamification_system; Owner: postgres

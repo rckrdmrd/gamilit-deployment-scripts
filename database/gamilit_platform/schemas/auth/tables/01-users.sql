@@ -21,7 +21,7 @@ CREATE TABLE auth.users (
     updated_at timestamp with time zone DEFAULT gamilit.now_mexico()
 );
 
-ALTER TABLE auth.users OWNER TO postgres;
+ALTER TABLE auth.users OWNER TO gamilit_user;
 
 -- =====================================================
 -- Constraints

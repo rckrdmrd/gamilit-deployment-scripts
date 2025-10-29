@@ -113,7 +113,7 @@ echo ""
 print_step "Verificando datos cargados..."
 
 echo -e "${CYAN}Usuarios:${NC}"
-psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -c "SELECT email, role FROM auth.users ORDER BY created_at;" -t
+psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -c "SELECT email, role FROM auth_management.users ORDER BY created_at;" -t
 
 echo -e "${CYAN}Módulos educativos:${NC}"
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -c "SELECT COUNT(*) as total_modules FROM educational_content.modules;" -t

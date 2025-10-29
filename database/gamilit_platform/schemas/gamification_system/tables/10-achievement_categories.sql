@@ -50,6 +50,6 @@ COMMENT ON COLUMN gamification_system.achievement_categories.display_order IS 'O
 COMMENT ON COLUMN gamification_system.achievement_categories.is_active IS 'Indica si la categoría está activa y visible';
 
 -- Permissions
-ALTER TABLE gamification_system.achievement_categories OWNER TO postgres;
+ALTER TABLE gamification_system.achievement_categories OWNER TO gamilit_user;
 GRANT ALL ON TABLE gamification_system.achievement_categories TO gamilit_user;
 GRANT SELECT ON TABLE gamification_system.achievement_categories TO PUBLIC;

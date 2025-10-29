@@ -39,7 +39,7 @@ CREATE TABLE audit_logging.user_activity_logs (
     CONSTRAINT user_activity_logs_activity_type_check CHECK ((activity_type = ANY (ARRAY['page_view'::text, 'button_click'::text, 'form_submit'::text, 'exercise_start'::text, 'exercise_complete'::text, 'module_access'::text, 'video_play'::text, 'resource_download'::text, 'search_query'::text])))
 );
 
-ALTER TABLE audit_logging.user_activity_logs OWNER TO postgres;
+ALTER TABLE audit_logging.user_activity_logs OWNER TO gamilit_user;
 
 -- =====================================================
 -- Constraints

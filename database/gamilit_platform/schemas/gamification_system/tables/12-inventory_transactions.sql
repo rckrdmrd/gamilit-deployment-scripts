@@ -55,5 +55,5 @@ COMMENT ON COLUMN gamification_system.inventory_transactions.metadata IS 'Inform
 COMMENT ON COLUMN gamification_system.inventory_transactions.created_at IS 'Fecha y hora de la transacción';
 
 -- Permissions
-ALTER TABLE gamification_system.inventory_transactions OWNER TO postgres;
+ALTER TABLE gamification_system.inventory_transactions OWNER TO gamilit_user;
 GRANT ALL ON TABLE gamification_system.inventory_transactions TO gamilit_user;

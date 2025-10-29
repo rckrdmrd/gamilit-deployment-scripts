@@ -41,7 +41,7 @@ CREATE TABLE audit_logging.audit_logs (
     CONSTRAINT audit_logs_status_check CHECK ((status = ANY (ARRAY['success'::text, 'failure'::text, 'partial'::text])))
 );
 
-ALTER TABLE audit_logging.audit_logs OWNER TO postgres;
+ALTER TABLE audit_logging.audit_logs OWNER TO gamilit_user;
 
 -- =====================================================
 -- Constraints

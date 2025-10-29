@@ -39,5 +39,5 @@ COMMENT ON COLUMN auth_management.password_reset_tokens.expires_at IS 'Token exp
 COMMENT ON COLUMN auth_management.password_reset_tokens.used_at IS 'Timestamp when token was used';
 
 -- Permissions
-ALTER TABLE auth_management.password_reset_tokens OWNER TO postgres;
+ALTER TABLE auth_management.password_reset_tokens OWNER TO gamilit_user;
 GRANT ALL ON TABLE auth_management.password_reset_tokens TO gamilit_user;

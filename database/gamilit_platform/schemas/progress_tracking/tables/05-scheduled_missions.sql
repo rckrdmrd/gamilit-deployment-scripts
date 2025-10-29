@@ -62,5 +62,5 @@ COMMENT ON COLUMN progress_tracking.scheduled_missions.bonus_xp IS 'Puntos de ex
 COMMENT ON COLUMN progress_tracking.scheduled_missions.bonus_coins IS 'ML Coins adicionales otorgadas al completar';
 
 -- Permissions
-ALTER TABLE progress_tracking.scheduled_missions OWNER TO postgres;
+ALTER TABLE progress_tracking.scheduled_missions OWNER TO gamilit_user;
 GRANT ALL ON TABLE progress_tracking.scheduled_missions TO gamilit_user;

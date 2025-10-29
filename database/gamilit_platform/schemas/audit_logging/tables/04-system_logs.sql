@@ -38,7 +38,7 @@ CREATE TABLE audit_logging.system_logs (
     CONSTRAINT system_logs_log_level_check CHECK ((log_level = ANY (ARRAY['TRACE'::text, 'DEBUG'::text, 'INFO'::text, 'WARN'::text, 'ERROR'::text, 'FATAL'::text])))
 );
 
-ALTER TABLE audit_logging.system_logs OWNER TO postgres;
+ALTER TABLE audit_logging.system_logs OWNER TO gamilit_user;
 
 -- =====================================================
 -- Constraints

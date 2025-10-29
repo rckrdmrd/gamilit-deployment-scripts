@@ -48,7 +48,7 @@ CREATE TABLE gamification_system.ml_coins_transactions (
 );
 
 
-ALTER TABLE gamification_system.ml_coins_transactions OWNER TO postgres;
+ALTER TABLE gamification_system.ml_coins_transactions OWNER TO gamilit_user;
 
 --
 -- Name: TABLE ml_coins_transactions; Type: COMMENT; Schema: gamification_system; Owner: postgres

@@ -38,5 +38,5 @@ COMMENT ON COLUMN auth_management.email_verification_tokens.token_hash IS 'Hashe
 COMMENT ON COLUMN auth_management.email_verification_tokens.verified_at IS 'Timestamp when email was verified';
 
 -- Permissions
-ALTER TABLE auth_management.email_verification_tokens OWNER TO postgres;
+ALTER TABLE auth_management.email_verification_tokens OWNER TO gamilit_user;
 GRANT ALL ON TABLE auth_management.email_verification_tokens TO gamilit_user;

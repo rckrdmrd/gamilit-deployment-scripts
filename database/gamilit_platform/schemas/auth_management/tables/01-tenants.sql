@@ -51,5 +51,5 @@ COMMENT ON COLUMN auth_management.tenants.slug IS 'URL-friendly identifier únic
 COMMENT ON COLUMN auth_management.tenants.subscription_tier IS 'Nivel de suscripción: free, basic, professional, enterprise';
 
 -- Permissions
-ALTER TABLE auth_management.tenants OWNER TO postgres;
+ALTER TABLE auth_management.tenants OWNER TO gamilit_user;
 GRANT ALL ON TABLE auth_management.tenants TO gamilit_user;

@@ -89,5 +89,5 @@ COMMENT ON COLUMN auth_management.profiles.grade_level IS 'Grado escolar del est
 COMMENT ON COLUMN auth_management.profiles.role IS 'Rol del usuario: student, admin_teacher, super_admin';
 
 -- Permissions
-ALTER TABLE auth_management.profiles OWNER TO postgres;
+ALTER TABLE auth_management.profiles OWNER TO gamilit_user;
 GRANT ALL ON TABLE auth_management.profiles TO gamilit_user;

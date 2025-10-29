@@ -68,7 +68,7 @@ CREATE TABLE progress_tracking.module_progress (
 );
 
 
-ALTER TABLE progress_tracking.module_progress OWNER TO postgres;
+ALTER TABLE progress_tracking.module_progress OWNER TO gamilit_user;
 
 --
 -- Name: TABLE module_progress; Type: COMMENT; Schema: progress_tracking; Owner: postgres

@@ -49,7 +49,7 @@ CREATE TABLE gamification_system.missions (
 );
 
 
-ALTER TABLE gamification_system.missions OWNER TO postgres;
+ALTER TABLE gamification_system.missions OWNER TO gamilit_user;
 
 --
 -- Name: TABLE missions; Type: COMMENT; Schema: gamification_system; Owner: postgres

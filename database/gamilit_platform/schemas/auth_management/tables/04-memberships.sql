@@ -55,5 +55,5 @@ COMMENT ON COLUMN auth_management.memberships.role IS 'Rol dentro del tenant: ow
 COMMENT ON COLUMN auth_management.memberships.status IS 'Estado de la membresía: active, suspended, pending, expired';
 
 -- Permissions
-ALTER TABLE auth_management.memberships OWNER TO postgres;
+ALTER TABLE auth_management.memberships OWNER TO gamilit_user;
 GRANT ALL ON TABLE auth_management.memberships TO gamilit_user;

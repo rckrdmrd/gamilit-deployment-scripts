@@ -46,7 +46,7 @@ CREATE TABLE progress_tracking.exercise_attempts (
 );
 
 
-ALTER TABLE progress_tracking.exercise_attempts OWNER TO postgres;
+ALTER TABLE progress_tracking.exercise_attempts OWNER TO gamilit_user;
 
 --
 -- Name: TABLE exercise_attempts; Type: COMMENT; Schema: progress_tracking; Owner: postgres

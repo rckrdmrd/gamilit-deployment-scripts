@@ -36,5 +36,5 @@ COMMENT ON COLUMN auth_management.auth_attempts.success IS 'True si el intento f
 COMMENT ON COLUMN auth_management.auth_attempts.failure_reason IS 'Razón del fallo: invalid_password, user_not_found, account_locked, etc.';
 
 -- Permissions
-ALTER TABLE auth_management.auth_attempts OWNER TO postgres;
+ALTER TABLE auth_management.auth_attempts OWNER TO gamilit_user;
 GRANT ALL ON TABLE auth_management.auth_attempts TO gamilit_user;

@@ -30,7 +30,7 @@ CREATE TABLE audit_logging.performance_metrics (
     CONSTRAINT performance_metrics_metric_type_check CHECK ((metric_type = ANY (ARRAY['counter'::text, 'gauge'::text, 'histogram'::text, 'timer'::text])))
 );
 
-ALTER TABLE audit_logging.performance_metrics OWNER TO postgres;
+ALTER TABLE audit_logging.performance_metrics OWNER TO gamilit_user;
 
 -- =====================================================
 -- Constraints

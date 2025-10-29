@@ -50,7 +50,7 @@ CREATE TABLE gamification_system.comodines_inventory (
 );
 
 
-ALTER TABLE gamification_system.comodines_inventory OWNER TO postgres;
+ALTER TABLE gamification_system.comodines_inventory OWNER TO gamilit_user;
 
 --
 -- Name: TABLE comodines_inventory; Type: COMMENT; Schema: gamification_system; Owner: postgres

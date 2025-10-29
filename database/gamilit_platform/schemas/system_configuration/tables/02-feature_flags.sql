@@ -29,7 +29,7 @@ CREATE TABLE system_configuration.feature_flags (
     CONSTRAINT feature_flags_rollout_percentage_check CHECK (((rollout_percentage >= 0) AND (rollout_percentage <= 100)))
 );
 
-ALTER TABLE system_configuration.feature_flags OWNER TO postgres;
+ALTER TABLE system_configuration.feature_flags OWNER TO gamilit_user;
 
 -- =====================================================
 -- Primary Key

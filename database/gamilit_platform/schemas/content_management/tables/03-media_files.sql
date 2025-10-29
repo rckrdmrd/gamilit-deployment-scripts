@@ -55,7 +55,7 @@ CREATE TABLE content_management.media_files (
     CONSTRAINT media_files_file_size_bytes_check CHECK ((file_size_bytes > 0))
 );
 
-ALTER TABLE content_management.media_files OWNER TO postgres;
+ALTER TABLE content_management.media_files OWNER TO gamilit_user;
 
 -- Primary Key
 ALTER TABLE ONLY content_management.media_files

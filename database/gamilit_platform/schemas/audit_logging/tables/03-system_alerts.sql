@@ -42,7 +42,7 @@ CREATE TABLE audit_logging.system_alerts (
     CONSTRAINT system_alerts_status_check CHECK ((status = ANY (ARRAY['open'::text, 'acknowledged'::text, 'resolved'::text, 'suppressed'::text])))
 );
 
-ALTER TABLE audit_logging.system_alerts OWNER TO postgres;
+ALTER TABLE audit_logging.system_alerts OWNER TO gamilit_user;
 
 -- =====================================================
 -- Constraints

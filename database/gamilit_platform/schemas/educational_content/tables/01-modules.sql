@@ -57,7 +57,7 @@ CREATE TABLE educational_content.modules (
     CONSTRAINT modules_xp_reward_check CHECK ((xp_reward >= 0))
 );
 
-ALTER TABLE educational_content.modules OWNER TO postgres;
+ALTER TABLE educational_content.modules OWNER TO gamilit_user;
 
 -- Primary Key
 ALTER TABLE ONLY educational_content.modules

@@ -29,7 +29,7 @@ CREATE TABLE content_management.content_templates (
     CONSTRAINT content_templates_template_type_check CHECK ((template_type = ANY (ARRAY['exercise'::text, 'module'::text, 'assessment'::text, 'announcement'::text, 'feedback'::text])))
 );
 
-ALTER TABLE content_management.content_templates OWNER TO postgres;
+ALTER TABLE content_management.content_templates OWNER TO gamilit_user;
 
 -- Primary Key
 ALTER TABLE ONLY content_management.content_templates

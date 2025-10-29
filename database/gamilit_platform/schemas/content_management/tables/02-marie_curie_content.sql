@@ -43,7 +43,7 @@ CREATE TABLE content_management.marie_curie_content (
     CONSTRAINT marie_curie_content_category_check CHECK ((category = ANY (ARRAY['biography'::text, 'discoveries'::text, 'historical_context'::text, 'scientific_method'::text, 'radioactivity'::text, 'nobel_prizes'::text, 'women_in_science'::text, 'modern_physics'::text, 'legacy'::text])))
 );
 
-ALTER TABLE content_management.marie_curie_content OWNER TO postgres;
+ALTER TABLE content_management.marie_curie_content OWNER TO gamilit_user;
 
 -- Primary Key
 ALTER TABLE ONLY content_management.marie_curie_content

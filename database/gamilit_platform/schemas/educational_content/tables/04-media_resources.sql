@@ -41,7 +41,7 @@ CREATE TABLE educational_content.media_resources (
     updated_at timestamp with time zone DEFAULT gamilit.now_mexico()
 );
 
-ALTER TABLE educational_content.media_resources OWNER TO postgres;
+ALTER TABLE educational_content.media_resources OWNER TO gamilit_user;
 
 -- Primary Key
 ALTER TABLE ONLY educational_content.media_resources

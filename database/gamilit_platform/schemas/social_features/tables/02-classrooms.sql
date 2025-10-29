@@ -55,7 +55,7 @@ CREATE TABLE social_features.classrooms (
 );
 
 
-ALTER TABLE social_features.classrooms OWNER TO postgres;
+ALTER TABLE social_features.classrooms OWNER TO gamilit_user;
 
 --
 -- Name: TABLE classrooms; Type: COMMENT; Schema: social_features; Owner: postgres

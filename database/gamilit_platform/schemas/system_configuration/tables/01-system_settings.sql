@@ -37,7 +37,7 @@ CREATE TABLE system_configuration.system_settings (
     CONSTRAINT system_settings_value_type_check CHECK ((value_type = ANY (ARRAY['string'::text, 'number'::text, 'boolean'::text, 'json'::text, 'array'::text])))
 );
 
-ALTER TABLE system_configuration.system_settings OWNER TO postgres;
+ALTER TABLE system_configuration.system_settings OWNER TO gamilit_user;
 
 -- =====================================================
 -- Primary Key

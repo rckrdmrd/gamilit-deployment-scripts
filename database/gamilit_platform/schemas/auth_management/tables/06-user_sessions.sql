@@ -55,5 +55,5 @@ COMMENT ON COLUMN auth_management.user_sessions.session_token IS 'JWT token úni
 COMMENT ON COLUMN auth_management.user_sessions.expires_at IS 'Fecha de expiración de la sesión';
 
 -- Permissions
-ALTER TABLE auth_management.user_sessions OWNER TO postgres;
+ALTER TABLE auth_management.user_sessions OWNER TO gamilit_user;
 GRANT ALL ON TABLE auth_management.user_sessions TO gamilit_user;

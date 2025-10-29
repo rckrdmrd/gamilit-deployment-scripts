@@ -61,5 +61,5 @@ COMMENT ON COLUMN gamification_system.active_boosts.expires_at IS 'Fecha y hora 
 COMMENT ON COLUMN gamification_system.active_boosts.is_active IS 'Indica si el boost está activo o ya expiró';
 
 -- Permissions
-ALTER TABLE gamification_system.active_boosts OWNER TO postgres;
+ALTER TABLE gamification_system.active_boosts OWNER TO gamilit_user;
 GRANT ALL ON TABLE gamification_system.active_boosts TO gamilit_user;

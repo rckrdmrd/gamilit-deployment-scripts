@@ -74,5 +74,5 @@ COMMENT ON COLUMN auth_management.user_preferences.tutorial_completed IS 'Indica
 COMMENT ON COLUMN auth_management.user_preferences.preferences IS 'Preferencias adicionales en formato JSON (configuraciones personalizadas)';
 
 -- Permissions
-ALTER TABLE auth_management.user_preferences OWNER TO postgres;
+ALTER TABLE auth_management.user_preferences OWNER TO gamilit_user;
 GRANT ALL ON TABLE auth_management.user_preferences TO gamilit_user;

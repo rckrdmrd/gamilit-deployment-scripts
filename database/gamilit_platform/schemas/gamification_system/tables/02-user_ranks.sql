@@ -50,7 +50,7 @@ CREATE TABLE gamification_system.user_ranks (
 );
 
 
-ALTER TABLE gamification_system.user_ranks OWNER TO postgres;
+ALTER TABLE gamification_system.user_ranks OWNER TO gamilit_user;
 
 --
 -- Name: TABLE user_ranks; Type: COMMENT; Schema: gamification_system; Owner: postgres
