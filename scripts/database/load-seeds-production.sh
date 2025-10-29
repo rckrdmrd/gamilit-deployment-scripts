@@ -14,17 +14,26 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
-# Database connection
-DB_HOST="localhost"
-DB_PORT="5432"
-DB_NAME="gamilit_platform"
-DB_USER="gamilit_user"
-export PGPASSWORD="mhXk+upgHBLuNNnRqWEzNo4i9RUvIhrj"
-
 # Base directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 SEED_DIR="$PROJECT_ROOT/database/gamilit_platform/seed-data"
+
+# Load database configuration from config.md
+CONFIG_FILE="$PROJECT_ROOT/database/setup/config.md"
+if [ -f "$CONFIG_FILE" ]; then
+    source "$CONFIG_FILE"
+    export PGPASSWORD="$DB_PASSWORD"
+else
+    echo "Error: config.md no encontrado en $CONFIG_FILE"
+    exit 1
+fi
+
+# Database connection (loaded from config.md)
+DB_HOST="${DB_HOST:-localhost}"
+DB_PORT="${DB_PORT:-5432}"
+DB_NAME="${DB_NAME:-gamilit_platform}"
+DB_USER="${DB_USER:-gamilit_user}"
 
 print_step() {
     echo -e "${CYAN}▶ $1${NC}"
