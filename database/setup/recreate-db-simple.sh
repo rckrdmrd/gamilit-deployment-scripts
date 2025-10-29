@@ -37,11 +37,11 @@ if [ ! -f "${CONFIG_FILE}" ]; then
 fi
 
 # Load config
-DB_HOST=$(grep "DB_HOST=" "${CONFIG_FILE}" | cut -d'=' -f2)
-DB_PORT=$(grep "DB_PORT=" "${CONFIG_FILE}" | cut -d'=' -f2)
-DB_NAME=$(grep "DB_NAME=" "${CONFIG_FILE}" | cut -d'=' -f2)
-DB_USER=$(grep "DB_USER=" "${CONFIG_FILE}" | cut -d'=' -f2)
-DB_PASSWORD=$(grep "DB_PASSWORD=" "${CONFIG_FILE}" | cut -d'=' -f2)
+DB_HOST=$(grep "^DB_HOST=" "${CONFIG_FILE}" | head -1 | cut -d'=' -f2)
+DB_PORT=$(grep "^DB_PORT=" "${CONFIG_FILE}" | head -1 | cut -d'=' -f2)
+DB_NAME=$(grep "^DB_NAME=" "${CONFIG_FILE}" | head -1 | cut -d'=' -f2)
+DB_USER=$(grep "^DB_USER=" "${CONFIG_FILE}" | head -1 | cut -d'=' -f2)
+DB_PASSWORD=$(grep "^DB_PASSWORD=" "${CONFIG_FILE}" | head -1 | cut -d'=' -f2)
 
 export PGPASSWORD="${DB_PASSWORD}"
 

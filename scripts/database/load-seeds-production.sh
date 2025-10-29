@@ -22,18 +22,16 @@ SEED_DIR="$PROJECT_ROOT/database/gamilit_platform/seed-data"
 # Load database configuration from config.md
 CONFIG_FILE="$PROJECT_ROOT/database/setup/config.md"
 if [ -f "$CONFIG_FILE" ]; then
-    source "$CONFIG_FILE"
+    DB_HOST=$(grep "^DB_HOST=" "$CONFIG_FILE" | head -1 | cut -d'=' -f2)
+    DB_PORT=$(grep "^DB_PORT=" "$CONFIG_FILE" | head -1 | cut -d'=' -f2)
+    DB_NAME=$(grep "^DB_NAME=" "$CONFIG_FILE" | head -1 | cut -d'=' -f2)
+    DB_USER=$(grep "^DB_USER=" "$CONFIG_FILE" | head -1 | cut -d'=' -f2)
+    DB_PASSWORD=$(grep "^DB_PASSWORD=" "$CONFIG_FILE" | head -1 | cut -d'=' -f2)
     export PGPASSWORD="$DB_PASSWORD"
 else
     echo "Error: config.md no encontrado en $CONFIG_FILE"
     exit 1
 fi
-
-# Database connection (loaded from config.md)
-DB_HOST="${DB_HOST:-localhost}"
-DB_PORT="${DB_PORT:-5432}"
-DB_NAME="${DB_NAME:-gamilit_platform}"
-DB_USER="${DB_USER:-gamilit_user}"
 
 print_step() {
     echo -e "${CYAN}▶ $1${NC}"
