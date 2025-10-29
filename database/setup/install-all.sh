@@ -100,8 +100,12 @@ for schema in "${schemas[@]}"; do
         for table_file in "${DDL_DIR}/schemas/${schema}/tables"/*.sql; do
             if [ -f "${table_file}" ]; then
                 filename=$(basename "${table_file}")
-                psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME} -f "${table_file}" > /dev/null 2>&1
-                echo -n "."
+                psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME} -f "${table_file}" >> /tmp/gamilit_ddl.log 2>&1
+                if [ $? -eq 0 ]; then
+                    echo -n "."
+                else
+                    echo -n "x"
+                fi
             fi
         done
         echo " ✓"
