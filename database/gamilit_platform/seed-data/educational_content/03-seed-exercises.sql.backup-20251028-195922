@@ -1,0 +1,2149 @@
+-- ============================================================================
+-- File: 03_educational_modules_complete_seed.sql
+-- Description: Complete educational modules with 31 exercise mechanics
+-- Schema: educational_content
+-- Created: 2025-10-16
+-- ============================================================================
+
+BEGIN;
+
+-- ============================================================================
+-- MODULE 1: COMPRENSIÓN LITERAL
+-- 5 exercises: crucigrama, timeline, sopa_letras, mapa_conceptual, emparejamiento
+-- ============================================================================
+
+INSERT INTO educational_content.modules (
+    title, subtitle, description, summary,
+    order_index, module_code,
+    difficulty_level, grade_levels, subjects,
+    estimated_duration_minutes, estimated_sessions,
+    learning_objectives, competencies, skills_developed,
+    maya_rank_required, xp_reward, ml_coins_reward,
+    status, is_published, is_featured, published_at
+) VALUES (
+    'Comprensión Literal',
+    'Descubre los Hechos Básicos de la Historia de Marie Curie',
+    'Aprende a identificar información explícita en los textos sobre Marie Curie. Desarrolla habilidades para reconocer fechas, nombres, lugares y eventos específicos mencionados directamente en el texto.',
+    'Módulo introductorio que trabaja la comprensión literal mediante mecánicas interactivas: crucigramas, líneas de tiempo, sopas de letras, mapas conceptuales y emparejamiento.',
+    1, 'MOD-01-LITERAL',
+    'beginner', ARRAY['6', '7', '8'], ARRAY['Literatura', 'Ciencias', 'Historia'],
+    120, 4,
+    ARRAY[
+        'Identificar información explícita en textos biográficos',
+        'Reconocer fechas y eventos importantes',
+        'Localizar nombres propios y lugares mencionados',
+        'Recordar detalles específicos del texto'
+    ],
+    ARRAY[
+        'Competencia lectora nivel literal',
+        'Comprensión de textos científicos',
+        'Memoria y retención de información'
+    ],
+    ARRAY[
+        'Lectura comprensiva',
+        'Identificación de datos explícitos',
+        'Organización de información',
+        'Vocabulario científico'
+    ],
+    NULL, 100, 50,
+    'published', true, true, gamilit.now_mexico()
+);
+
+-- Get Module 1 ID for exercises
+DO $$
+DECLARE
+    mod1_id UUID;
+BEGIN
+    SELECT id INTO mod1_id FROM educational_content.modules WHERE module_code = 'MOD-01-LITERAL';
+
+    -- Exercise 1.1: Crucigrama Científico
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, time_limit_minutes, max_attempts,
+        hints, enable_hints, hint_cost_ml_coins,
+        comodines_allowed, comodines_config,
+        xp_reward, ml_coins_reward,
+        is_active, version
+    ) VALUES (
+        mod1_id,
+        'Crucigrama Científico: Descubrimientos de Marie Curie',
+        'Vocabulario de Radioactividad',
+        'Completa el crucigrama con términos científicos relacionados con los descubrimientos de Marie Curie',
+        'Lee las pistas horizontales y verticales. Haz clic en una casilla para comenzar a escribir. Usa las flechas del teclado para moverte entre casillas.',
+        'crucigrama', 1,
+        '{
+            "gridSize": {"rows": 10, "cols": 10},
+            "autoCheck": true,
+            "showProgress": true,
+            "keyboardNav": true
+        }'::jsonb,
+        '{
+            "grid": [
+                [{"letter": "R", "isBlack": false, "clueNumber": 1}, {"letter": "A", "isBlack": false}, {"letter": "D", "isBlack": false}, {"letter": "I", "isBlack": false}, {"letter": "O", "isBlack": false}],
+                [{"letter": "", "isBlack": true}, {"letter": "", "isBlack": true}, {"letter": "", "isBlack": true}, {"letter": "", "isBlack": true}, {"letter": "", "isBlack": true}]
+            ],
+            "clues": [
+                {
+                    "id": "h1",
+                    "number": 1,
+                    "direction": "horizontal",
+                    "clue": "Elemento químico descubierto por Marie Curie en 1898",
+                    "answer": "RADIO",
+                    "startRow": 0,
+                    "startCol": 0,
+                    "length": 5
+                },
+                {
+                    "id": "v1",
+                    "number": 2,
+                    "direction": "vertical",
+                    "clue": "Fenómeno de emisión de radiación descubierto por Marie Curie",
+                    "answer": "RADIOACTIVIDAD",
+                    "startRow": 0,
+                    "startCol": 0,
+                    "length": 14
+                },
+                {
+                    "id": "h2",
+                    "number": 3,
+                    "direction": "horizontal",
+                    "clue": "Otro elemento descubierto por Marie Curie, nombrado por su país natal",
+                    "answer": "POLONIO",
+                    "startRow": 2,
+                    "startCol": 1,
+                    "length": 7
+                }
+            ]
+        }'::jsonb,
+        '{"correctAnswers": ["RADIO", "RADIOACTIVIDAD", "POLONIO"]}'::jsonb,
+        'beginner', 100, 70,
+        15, 25, 3,
+        ARRAY[
+            'Piensa en los elementos químicos descubiertos por Marie Curie',
+            'Uno de los elementos lleva el nombre de su país natal: Polonia',
+            'El fenómeno principal que estudió tiene que ver con la emisión de radiación'
+        ],
+        true, 10,
+        ARRAY['pistas', 'vision_lectora', 'segunda_oportunidad']::comodin_type[],
+        '{
+            "pistas": {"enabled": true, "cost": 15},
+            "vision_lectora": {"enabled": true, "cost": 25},
+            "segunda_oportunidad": {"enabled": true, "cost": 40}
+        }'::jsonb,
+        20, 10,
+        true, 1
+    );
+
+    -- Exercise 1.2: Línea de Tiempo
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod1_id,
+        'Línea de Tiempo: Vida de Marie Curie',
+        'Ordena los Eventos Cronológicos',
+        'Arrastra y ordena los eventos más importantes de la vida de Marie Curie en orden cronológico',
+        'Arrastra los eventos para ordenarlos desde el más antiguo hasta el más reciente. Los eventos se iluminarán cuando estén en la posición correcta.',
+        'linea_tiempo', 2,
+        '{"dragAndDrop": true, "showDates": false, "shuffled": true}'::jsonb,
+        '{
+            "events": [
+                {
+                    "id": "evt1",
+                    "year": 1867,
+                    "date": "7 de noviembre de 1867",
+                    "title": "Nacimiento en Varsovia",
+                    "description": "Maria Sklodowska nace en Varsovia, Polonia",
+                    "correctOrder": 1
+                },
+                {
+                    "id": "evt2",
+                    "year": 1891,
+                    "date": "1891",
+                    "title": "Llega a París",
+                    "description": "Se muda a París para estudiar en la Sorbona",
+                    "correctOrder": 2
+                },
+                {
+                    "id": "evt3",
+                    "year": 1895,
+                    "date": "25 de julio de 1895",
+                    "title": "Matrimonio con Pierre Curie",
+                    "description": "Se casa con el físico Pierre Curie",
+                    "correctOrder": 3
+                },
+                {
+                    "id": "evt4",
+                    "year": 1898,
+                    "date": "Diciembre de 1898",
+                    "title": "Descubrimiento del Radio y Polonio",
+                    "description": "Descubre dos nuevos elementos radiactivos",
+                    "correctOrder": 4
+                },
+                {
+                    "id": "evt5",
+                    "year": 1903,
+                    "date": "1903",
+                    "title": "Primer Premio Nobel de Física",
+                    "description": "Recibe el Nobel de Física junto a Pierre Curie y Henri Becquerel",
+                    "correctOrder": 5
+                },
+                {
+                    "id": "evt6",
+                    "year": 1911,
+                    "date": "1911",
+                    "title": "Segundo Premio Nobel de Química",
+                    "description": "Recibe su segundo Nobel por el aislamiento del radio puro",
+                    "correctOrder": 6
+                },
+                {
+                    "id": "evt7",
+                    "year": 1934,
+                    "date": "4 de julio de 1934",
+                    "title": "Fallecimiento",
+                    "description": "Muere en Passy, Francia, por exposición a la radiación",
+                    "correctOrder": 7
+                }
+            ]
+        }'::jsonb,
+        '{"correctOrder": [1, 2, 3, 4, 5, 6, 7]}'::jsonb,
+        'beginner', 100, 70,
+        12, 3,
+        ARRAY[
+            'Marie Curie nació en el siglo XIX',
+            'Recibió dos premios Nobel en diferentes disciplinas',
+            'El descubrimiento del Radio y Polonio fue anterior a su primer Nobel'
+        ],
+        20, 10,
+        true
+    );
+
+    -- Exercise 1.3: Sopa de Letras
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod1_id,
+        'Sopa de Letras: Vocabulario Científico',
+        'Encuentra las Palabras Clave',
+        'Encuentra todas las palabras relacionadas con los descubrimientos científicos de Marie Curie',
+        'Haz clic y arrastra para seleccionar palabras en el grid. Las palabras pueden estar en horizontal, vertical o diagonal.',
+        'sopa_letras', 3,
+        '{"gridSize": 12, "directions": ["horizontal", "vertical", "diagonal"], "highlightFound": true}'::jsonb,
+        '{
+            "words": [
+                {"word": "RADIO", "category": "elementos"},
+                {"word": "POLONIO", "category": "elementos"},
+                {"word": "URANIO", "category": "elementos"},
+                {"word": "RADIACTIVIDAD", "category": "fenómenos"},
+                {"word": "RADIACION", "category": "fenómenos"},
+                {"word": "NOBEL", "category": "premios"},
+                {"word": "FISICA", "category": "ciencias"},
+                {"word": "QUIMICA", "category": "ciencias"},
+                {"word": "LABORATORIO", "category": "lugares"},
+                {"word": "SORBONA", "category": "lugares"}
+            ],
+            "grid": "RANDOMIZED"
+        }'::jsonb,
+        '{"foundWords": [], "totalWords": 10}'::jsonb,
+        'easy', 100, 70,
+        10, 3,
+        ARRAY[
+            'Busca nombres de elementos químicos descubiertos por Marie Curie',
+            'Recuerda las disciplinas científicas en las que trabajó',
+            'Piensa en los lugares donde realizó sus investigaciones'
+        ],
+        15, 8,
+        true
+    );
+
+    -- Exercise 1.4: Mapa Conceptual
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod1_id,
+        'Mapa Conceptual: Descubrimientos de Marie Curie',
+        'Conecta los Conceptos',
+        'Crea conexiones entre los conceptos relacionados con los descubrimientos de Marie Curie',
+        'Arrastra los nodos para organizarlos. Haz clic en un nodo y luego en otro para crear una conexión. Escribe el tipo de relación entre los conceptos.',
+        'infografia_interactiva', 4,
+        '{"draggableNodes": true, "editableConnections": true, "colorByCategory": true}'::jsonb,
+        '{
+            "nodes": [
+                {
+                    "id": "n1",
+                    "label": "Marie Curie",
+                    "category": "persona",
+                    "x": 400,
+                    "y": 200
+                },
+                {
+                    "id": "n2",
+                    "label": "Radioactividad",
+                    "category": "fenómeno",
+                    "x": 200,
+                    "y": 100
+                },
+                {
+                    "id": "n3",
+                    "label": "Radio",
+                    "category": "elemento",
+                    "x": 200,
+                    "y": 300
+                },
+                {
+                    "id": "n4",
+                    "label": "Polonio",
+                    "category": "elemento",
+                    "x": 600,
+                    "y": 300
+                },
+                {
+                    "id": "n5",
+                    "label": "Premio Nobel Física",
+                    "category": "reconocimiento",
+                    "x": 600,
+                    "y": 100
+                }
+            ],
+            "correctConnections": [
+                {"from": "n1", "to": "n2", "relationship": "descubrió"},
+                {"from": "n1", "to": "n3", "relationship": "aisló"},
+                {"from": "n1", "to": "n4", "relationship": "descubrió"},
+                {"from": "n1", "to": "n5", "relationship": "ganó"}
+            ]
+        }'::jsonb,
+        '{"minConnections": 3, "requiredConnections": ["n1-n2", "n1-n3", "n1-n5"]}'::jsonb,
+        'medium', 100, 70,
+        15, 3,
+        ARRAY[
+            'Marie Curie descubrió varios elementos radiactivos',
+            'Ganó reconocimientos importantes por sus descubrimientos',
+            'El Radio y el Polonio son elementos que ella aisló'
+        ],
+        25, 12,
+        true
+    );
+
+    -- Exercise 1.5: Emparejamiento
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod1_id,
+        'Emparejamiento: Fechas y Eventos',
+        'Juego de Memoria Histórico',
+        'Encuentra los pares correctos entre fechas y eventos importantes de la vida de Marie Curie',
+        'Haz clic en dos cartas para voltearlas. Si coinciden (fecha con su evento), permanecerán visibles. Si no, se voltearán de nuevo.',
+        'emparejamiento', 5,
+        '{"flipAnimation": true, "shuffleCards": true, "maxFlippedCards": 2}'::jsonb,
+        '{
+            "pairs": [
+                {
+                    "id": "pair1",
+                    "cardA": {"text": "1867", "type": "date"},
+                    "cardB": {"text": "Nacimiento en Varsovia", "type": "event"}
+                },
+                {
+                    "id": "pair2",
+                    "cardA": {"text": "1891", "type": "date"},
+                    "cardB": {"text": "Estudios en la Sorbona", "type": "event"}
+                },
+                {
+                    "id": "pair3",
+                    "cardA": {"text": "1898", "type": "date"},
+                    "cardB": {"text": "Descubrimiento del Radio", "type": "event"}
+                },
+                {
+                    "id": "pair4",
+                    "cardA": {"text": "1903", "type": "date"},
+                    "cardB": {"text": "Primer Premio Nobel", "type": "event"}
+                },
+                {
+                    "id": "pair5",
+                    "cardA": {"text": "1911", "type": "date"},
+                    "cardB": {"text": "Segundo Premio Nobel", "type": "event"}
+                },
+                {
+                    "id": "pair6",
+                    "cardA": {"text": "1934", "type": "date"},
+                    "cardB": {"text": "Fallecimiento en Francia", "type": "event"}
+                }
+            ]
+        }'::jsonb,
+        '{"totalPairs": 6, "maxAttempts": 20}'::jsonb,
+        'easy', 100, 70,
+        10, 3,
+        ARRAY[
+            'Marie Curie vivió desde el siglo XIX hasta el siglo XX',
+            'Ganó dos premios Nobel en diferentes años',
+            'El descubrimiento del Radio fue en 1898'
+        ],
+        20, 10,
+        true
+    );
+
+    RAISE NOTICE '✓ Module 1 (Comprensión Literal) created with 5 exercises';
+END $$;
+
+-- ============================================================================
+-- MODULE 2: COMPRENSIÓN INFERENCIAL
+-- 5 exercises: detective_textual, construccion_hipotesis, prediccion_narrativa, puzzle_contexto, rueda_inferencias
+-- ============================================================================
+
+INSERT INTO educational_content.modules (
+    title, subtitle, description, summary,
+    order_index, module_code,
+    difficulty_level, grade_levels, subjects,
+    estimated_duration_minutes, estimated_sessions,
+    learning_objectives, competencies, skills_developed,
+    maya_rank_required, xp_reward, ml_coins_reward,
+    status, is_published, published_at
+) VALUES (
+    'Comprensión Inferencial',
+    'Lee Entre Líneas en la Historia de Marie Curie',
+    'Desarrolla habilidades para interpretar información implícita, hacer deducciones y comprender significados no expresados directamente en los textos sobre Marie Curie.',
+    'Módulo intermedio que trabaja la comprensión inferencial mediante mecánicas de investigación: detective textual, construcción de hipótesis, predicciones narrativas y análisis contextual.',
+    2, 'MOD-02-INFERENCIAL',
+    'intermediate', ARRAY['6', '7', '8'], ARRAY['Literatura', 'Ciencias', 'Pensamiento Crítico'],
+    150, 5,
+    ARRAY[
+        'Realizar inferencias a partir de información del texto',
+        'Deducir causas y consecuencias de eventos',
+        'Interpretar motivaciones y sentimientos de personajes',
+        'Predecir eventos futuros basándose en el contexto'
+    ],
+    ARRAY[
+        'Pensamiento crítico',
+        'Razonamiento lógico',
+        'Análisis e interpretación textual'
+    ],
+    ARRAY[
+        'Deducción e inferencia',
+        'Análisis de evidencias',
+        'Predicción basada en contexto',
+        'Construcción de hipótesis'
+    ],
+    NULL, 150, 75,
+    'published', true, gamilit.now_mexico()
+);
+
+-- Get Module 2 ID
+DO $$
+DECLARE
+    mod2_id UUID;
+BEGIN
+    SELECT id INTO mod2_id FROM educational_content.modules WHERE module_code = 'MOD-02-INFERENCIAL';
+
+    -- Exercise 2.1: Detective Textual
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod2_id,
+        'Detective Textual: El Misterio de la Radiación',
+        'Investiga las Pistas del Texto',
+        'Analiza el texto sobre Marie Curie como un detective. Encuentra evidencias, crea conexiones y resuelve el misterio de cómo descubrió la radioactividad',
+        'Usa la lupa para explorar el texto. Recoge evidencias importantes y crea conexiones entre ellas. Formula hipótesis sobre cómo Marie llegó a sus descubrimientos.',
+        'detective_textual', 1,
+        '{
+            "investigationMode": true,
+            "evidenceCollection": true,
+            "connectionMapping": true,
+            "aiHints": true
+        }'::jsonb,
+        '{
+            "investigation": {
+                "title": "¿Cómo descubrió Marie Curie la radioactividad?",
+                "mystery": "Marie Curie hizo descubrimientos revolucionarios sin tecnología moderna. ¿Cómo lo logró?",
+                "text": "Marie Curie trabajaba en un pequeño laboratorio improvisado. Las condiciones eran difíciles: frío en invierno, calor en verano. Pero Marie no se rendía. Pasaba horas procesando toneladas de pechblenda, un mineral que contenía uranio. Notó algo extraño: la radiación de la pechblenda era más fuerte de lo esperado. Esto sugería la presencia de elementos desconocidos...",
+                "evidences": [
+                    {
+                        "id": "ev1",
+                        "type": "observation",
+                        "title": "Radiación anormal",
+                        "content": "La pechblenda emitía más radiación que el uranio puro"
+                    },
+                    {
+                        "id": "ev2",
+                        "type": "hypothesis",
+                        "title": "Elementos desconocidos",
+                        "content": "Marie hipotetizó que había elementos nuevos en la pechblenda"
+                    },
+                    {
+                        "id": "ev3",
+                        "type": "action",
+                        "title": "Procesamiento masivo",
+                        "content": "Procesó toneladas de mineral para aislar cantidades mínimas"
+                    }
+                ]
+            }
+        }'::jsonb,
+        '{"minConnections": 2, "hypothesisRequired": true}'::jsonb,
+        'intermediate', 100, 70,
+        20, 3,
+        ARRAY[
+            'Una observación inesperada llevó a Marie a investigar más',
+            'El método científico requiere paciencia y perseverancia',
+            'Las hipótesis se prueban mediante experimentos repetidos'
+        ],
+        30, 15,
+        true
+    );
+
+    -- Exercise 2.2: Construcción de Hipótesis
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod2_id,
+        'Construcción de Hipótesis: El Método Científico de Marie',
+        'Formula y Prueba Hipótesis',
+        'Lee las observaciones de Marie Curie y construye hipótesis científicas basadas en evidencias',
+        'Lee cada observación cuidadosamente. Formula una hipótesis que explique el fenómeno. Selecciona el experimento que podría probar tu hipótesis.',
+        'infografia_interactiva', 2,
+        '{"scaffolding": true, "multipleHypotheses": true, "experimentSelection": true}'::jsonb,
+        '{
+            "scenarios": [
+                {
+                    "id": "sc1",
+                    "observation": "La pechblenda emite más radiación que el uranio puro",
+                    "possibleHypotheses": [
+                        "Hay otros elementos radiactivos en la pechblenda",
+                        "El uranio se vuelve más radiactivo en combinación",
+                        "La radiación aumenta con el tiempo"
+                    ],
+                    "correctHypothesis": 0,
+                    "experiments": [
+                        "Separar químicamente los componentes de la pechblenda",
+                        "Calentar la pechblenda a altas temperaturas",
+                        "Esperar varios meses y medir de nuevo"
+                    ],
+                    "correctExperiment": 0
+                }
+            ]
+        }'::jsonb,
+        '{"correctHypotheses": 1, "validExperiments": 1}'::jsonb,
+        'intermediate', 100, 70,
+        15, 3,
+        ARRAY[
+            'Una hipótesis debe ser verificable mediante experimentos',
+            'Las observaciones inesperadas suelen indicar nuevos descubrimientos',
+            'El método científico requiere separar variables'
+        ],
+        25, 12,
+        true
+    );
+
+    -- Exercise 2.3: Predicción Narrativa
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod2_id,
+        'Predicción Narrativa: ¿Qué Sucederá Después?',
+        'Anticipa los Eventos Futuros',
+        'Lee fragmentos de la vida de Marie Curie y predice qué sucederá después basándote en el contexto',
+        'Lee el fragmento cuidadosamente. Analiza las pistas contextuales. Selecciona la predicción más probable según la información dada.',
+        'verdadero_falso', 3,
+        '{"contextClues": true, "justificationRequired": true}'::jsonb,
+        '{
+            "passages": [
+                {
+                    "id": "pass1",
+                    "text": "Después de años de trabajo agotador, Marie finalmente aisló una pequeña cantidad de radio puro. Sus manos estaban agrietadas y doloridas por el contacto constante con materiales radiactivos. A pesar del dolor, continuaba trabajando cada día...",
+                    "question": "¿Qué consecuencia es más probable que ocurra?",
+                    "options": [
+                        "Marie abandona la ciencia para cuidar su salud",
+                        "Marie continúa investigando a pesar de los riesgos",
+                        "Marie se muda a otro país para trabajar",
+                        "Marie pide ayuda a otros científicos"
+                    ],
+                    "correctOption": 1,
+                    "clues": ["trabajo agotador", "a pesar del dolor", "continuaba trabajando"]
+                }
+            ]
+        }'::jsonb,
+        '{"correctPredictions": 1, "cluesIdentified": 3}'::jsonb,
+        'intermediate', 100, 70,
+        12, 3,
+        ARRAY[
+            'Busca frases que indiquen la personalidad de Marie',
+            'Las acciones pasadas predicen las futuras',
+            'Identifica palabras clave como "a pesar de" y "continuaba"'
+        ],
+        25, 12,
+        true
+    );
+
+    -- Exercise 2.4: Puzzle Contexto
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod2_id,
+        'Puzzle de Contexto: Reconstruye la Historia',
+        'Organiza las Piezas del Contexto',
+        'Las piezas de información están desordenadas. Usa el contexto para reconstruir la historia completa',
+        'Arrastra las piezas de contexto al lugar correcto. Cada pieza contiene información que debe encajar lógicamente con las demás.',
+        'emparejamiento', 4,
+        '{"contextualClues": true, "logicalSequence": true}'::jsonb,
+        '{
+            "fragments": [
+                {
+                    "id": "frag1",
+                    "text": "Marie llegó a París con muy poco dinero",
+                    "position": 1,
+                    "category": "contexto inicial"
+                },
+                {
+                    "id": "frag2",
+                    "text": "Por eso, vivía en una buhardilla fría y comía poco",
+                    "position": 2,
+                    "category": "consecuencia"
+                },
+                {
+                    "id": "frag3",
+                    "text": "Sin embargo, su pasión por la ciencia la mantenía motivada",
+                    "position": 3,
+                    "category": "contraste"
+                },
+                {
+                    "id": "frag4",
+                    "text": "Finalmente, logró graduarse con honores",
+                    "position": 4,
+                    "category": "resultado"
+                }
+            ]
+        }'::jsonb,
+        '{"correctSequence": [1, 2, 3, 4]}'::jsonb,
+        'intermediate', 100, 70,
+        15, 3,
+        ARRAY[
+            'Busca conectores lógicos como "por eso" y "sin embargo"',
+            'La causa debe ir antes del efecto',
+            'El resultado final suele ir al último'
+        ],
+        25, 12,
+        true
+    );
+
+    -- Exercise 2.5: Rueda de Inferencias
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod2_id,
+        'Rueda de Inferencias: Deducciones Múltiples',
+        'Conecta Evidencias con Conclusiones',
+        'Gira la rueda para conectar evidencias del texto con las inferencias correctas',
+        'Lee cada evidencia del texto. Gira la rueda para encontrar la inferencia que mejor se deriva de esa evidencia.',
+        'infografia_interactiva', 5,
+        '{"wheelInterface": true, "multipleInferences": true}'::jsonb,
+        '{
+            "evidences": [
+                {
+                    "id": "ev1",
+                    "text": "Marie trabajaba en un laboratorio sin calefacción",
+                    "correctInference": "Las condiciones de trabajo eran muy difíciles"
+                },
+                {
+                    "id": "ev2",
+                    "text": "Procesaba toneladas de mineral para obtener gramos de radio",
+                    "correctInference": "El proceso requería mucha paciencia y esfuerzo físico"
+                },
+                {
+                    "id": "ev3",
+                    "text": "Continuó investigando después de la muerte de Pierre",
+                    "correctInference": "Marie era muy perseverante y dedicada a la ciencia"
+                }
+            ],
+            "inferences": [
+                "Las condiciones de trabajo eran muy difíciles",
+                "El proceso requería mucha paciencia y esfuerzo físico",
+                "Marie era muy perseverante y dedicada a la ciencia",
+                "Tenía mucho apoyo económico",
+                "Le gustaba el frío"
+            ]
+        }'::jsonb,
+        '{"correctConnections": 3}'::jsonb,
+        'intermediate', 100, 70,
+        15, 3,
+        ARRAY[
+            'Una inferencia debe tener apoyo lógico en el texto',
+            'No todas las opciones son inferencias válidas',
+            'Busca la conexión más directa entre evidencia e inferencia'
+        ],
+        30, 15,
+        true
+    );
+
+    RAISE NOTICE '✓ Module 2 (Comprensión Inferencial) created with 5 exercises';
+END $$;
+
+-- ============================================================================
+-- MODULE 3: COMPRENSIÓN CRÍTICA
+-- 5 exercises: analisis_fuentes, debate_digital, matriz_perspectivas, podcast_argumentativo, tribunal_opiniones
+-- ============================================================================
+
+INSERT INTO educational_content.modules (
+    title, subtitle, description, summary,
+    order_index, module_code,
+    difficulty_level, grade_levels, subjects,
+    estimated_duration_minutes, estimated_sessions,
+    learning_objectives, competencies, skills_developed,
+    maya_rank_required, xp_reward, ml_coins_reward,
+    status, is_published, published_at
+) VALUES (
+    'Comprensión Crítica',
+    'Evalúa y Cuestiona la Historia de Marie Curie',
+    'Desarrolla habilidades de pensamiento crítico para evaluar, cuestionar y formar opiniones fundamentadas sobre los textos relacionados con Marie Curie.',
+    'Módulo avanzado que trabaja la comprensión crítica mediante análisis de fuentes, debates, evaluación de perspectivas y argumentación estructurada.',
+    3, 'MOD-03-CRITICA',
+    'advanced', ARRAY['7', '8', '9'], ARRAY['Literatura', 'Ciencias', 'Pensamiento Crítico', 'Filosofía'],
+    180, 6,
+    ARRAY[
+        'Evaluar la credibilidad de fuentes de información',
+        'Identificar sesgos y perspectivas en textos',
+        'Formar y defender opiniones con argumentos sólidos',
+        'Analizar diferentes puntos de vista sobre un tema'
+    ],
+    ARRAY[
+        'Pensamiento crítico avanzado',
+        'Argumentación y debate',
+        'Análisis de perspectivas',
+        'Evaluación de evidencias'
+    ],
+    ARRAY[
+        'Análisis crítico de textos',
+        'Evaluación de fuentes',
+        'Argumentación estructurada',
+        'Debate y contraargumentación'
+    ],
+    'batab', 200, 100,
+    'published', true, gamilit.now_mexico()
+);
+
+-- Get Module 3 ID
+DO $$
+DECLARE
+    mod3_id UUID;
+BEGIN
+    SELECT id INTO mod3_id FROM educational_content.modules WHERE module_code = 'MOD-03-CRITICA';
+
+    -- Exercise 3.1: Análisis de Fuentes
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod3_id,
+        'Análisis de Fuentes: ¿Es Confiable Esta Información?',
+        'Evalúa la Credibilidad de las Fuentes',
+        'Analiza diferentes fuentes de información sobre Marie Curie y determina su credibilidad y confiabilidad',
+        'Lee cada fuente cuidadosamente. Evalúa su credibilidad considerando: autor, fecha, evidencias, sesgos y propósito.',
+        'classification', 1,
+        '{
+            "criteriaEvaluation": true,
+            "sourceComparison": true,
+            "biasDetection": true
+        }'::jsonb,
+        '{
+            "sources": [
+                {
+                    "id": "src1",
+                    "title": "Artículo de revista científica revisada por pares",
+                    "author": "Dr. Jean-Pierre Lumière, historiador de la ciencia",
+                    "date": "2020",
+                    "excerpt": "Marie Curie revolucionó la física nuclear con sus descubrimientos del radio y polonio, elementos que aislóó mediante riguroso trabajo experimental...",
+                    "evidence": "Citas de documentos originales, referencias bibliográficas extensas",
+                    "credibility": "alta"
+                },
+                {
+                    "id": "src2",
+                    "title": "Publicación en blog personal",
+                    "author": "Usuario anónimo",
+                    "date": "2023",
+                    "excerpt": "Marie Curie robó las ideas de su esposo y solo ganó fama por ser mujer en un campo dominado por hombres...",
+                    "evidence": "Sin referencias, opiniones sin fundamento",
+                    "credibility": "baja"
+                },
+                {
+                    "id": "src3",
+                    "title": "Biografía académica publicada",
+                    "author": "Dra. Eve Curie (hija de Marie Curie)",
+                    "date": "1937",
+                    "excerpt": "Mi madre trabajaba incansablemente, a menudo sacrificando su propia salud por la ciencia...",
+                    "evidence": "Relatos de primera mano, documentos familiares",
+                    "credibility": "media-alta (perspectiva personal pero informada)"
+                }
+            ],
+            "evaluationCriteria": [
+                "Credibilidad del autor",
+                "Evidencias presentadas",
+                "Presencia de sesgos",
+                "Fecha de publicación",
+                "Propósito del texto"
+            ]
+        }'::jsonb,
+        '{"sourceRankings": {"src1": 1, "src3": 2, "src2": 3}}'::jsonb,
+        'advanced', 100, 70,
+        20, 3,
+        ARRAY[
+            'Las fuentes académicas revisadas por pares son más confiables',
+            'Los testimonios de primera mano tienen valor pero pueden tener sesgos',
+            'Las fuentes anónimas sin evidencias son poco confiables'
+        ],
+        35, 18,
+        true
+    );
+
+    -- Exercise 3.2: Debate Digital
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod3_id,
+        'Debate Digital: El Legado de Marie Curie',
+        'Argumenta y Contraargumenta',
+        'Participa en un debate estructurado sobre aspectos controvertidos del legado de Marie Curie',
+        'Lee la tesis del debate. Construye argumentos sólidos con evidencias. Responde a contraargumentos de manera lógica.',
+        'discussion', 2,
+        '{
+            "structuredDebate": true,
+            "argumentBuilding": true,
+            "counterarguments": true,
+            "evidenceRequired": true
+        }'::jsonb,
+        '{
+            "debateTopic": "¿Los descubrimientos de Marie Curie justificaron los riesgos para su salud?",
+            "positions": [
+                {
+                    "stance": "a_favor",
+                    "mainArgument": "Sus descubrimientos salvaron millones de vidas con tratamientos de radiación",
+                    "supportingEvidence": [
+                        "La radioterapia cura muchos tipos de cáncer",
+                        "Sus investigaciones abrieron campos enteros de la ciencia",
+                        "Ella aceptó conscientemente los riesgos"
+                    ]
+                },
+                {
+                    "stance": "en_contra",
+                    "mainArgument": "Ningún descubrimiento vale más que la vida humana",
+                    "supportingEvidence": [
+                        "Marie murió por exposición a radiación",
+                        "No se conocían completamente los riesgos en su época",
+                        "La ciencia debe priorizar la seguridad de los investigadores"
+                    ]
+                }
+            ],
+            "evaluationRubric": {
+                "claridad": 25,
+                "evidencias": 30,
+                "lógica": 25,
+                "respeto": 20
+            }
+        }'::jsonb,
+        '{"minArguments": 3, "evidenceRequired": true, "counterargumentsAddressed": 2}'::jsonb,
+        'advanced', 100, 70,
+        25, 3,
+        ARRAY[
+            'Un buen argumento combina lógica con evidencias concretas',
+            'Reconoce puntos válidos del oponente antes de contra-argumentar',
+            'Mantén el respeto incluso en desacuerdo'
+        ],
+        40, 20,
+        true
+    );
+
+    -- Exercise 3.3: Matriz de Perspectivas
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod3_id,
+        'Matriz de Perspectivas: Múltiples Puntos de Vista',
+        'Analiza Diferentes Perspectivas',
+        'Analiza el mismo evento histórico desde múltiples perspectivas: Marie Curie, la comunidad científica, su familia y la sociedad',
+        'Lee el evento histórico. Identifica cómo cada grupo lo percibió. Completa la matriz con las perspectivas correspondientes.',
+        'classification', 3,
+        '{
+            "multipleViewpoints": true,
+            "perspectiveComparison": true,
+            "biasAwareness": true
+        }'::jsonb,
+        '{
+            "event": "Marie Curie gana el Premio Nobel de Física en 1903",
+            "perspectives": [
+                {
+                    "viewpoint": "Marie Curie",
+                    "perception": "Reconocimiento merecido pero compartido con Pierre",
+                    "emotions": "Orgullo, humildad, determinación de continuar",
+                    "concerns": "Que no se reconozca su contribución individual"
+                },
+                {
+                    "viewpoint": "Comunidad Científica Masculina",
+                    "perception": "Sorpresa de que una mujer reciba tal honor",
+                    "emotions": "Escepticismo, algunos respeto, otros resentimiento",
+                    "concerns": "Precedente para más mujeres en ciencia"
+                },
+                {
+                    "viewpoint": "Pierre Curie",
+                    "perception": "Reconocimiento justo para ambos",
+                    "emotions": "Orgullo por los logros de Marie",
+                    "concerns": "Que no se valore suficientemente el trabajo de Marie"
+                },
+                {
+                    "viewpoint": "Sociedad Parisina",
+                    "perception": "Curiosidad y fascinación",
+                    "emotions": "Asombro, admiración, algunos prejuicios",
+                    "concerns": "Roles tradicionales de género desafiados"
+                }
+            ]
+        }'::jsonb,
+        '{"perspectivesIdentified": 4, "biasesRecognized": 3}'::jsonb,
+        'advanced', 100, 70,
+        20, 3,
+        ARRAY[
+            'Cada grupo tiene intereses y sesgos diferentes',
+            'El contexto histórico influye en las perspectivas',
+            'Las emociones y preocupaciones revelan valores subyacentes'
+        ],
+        35, 18,
+        true
+    );
+
+    -- Exercise 3.4: Podcast Argumentativo
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod3_id,
+        'Podcast Argumentativo: Crea Tu Episodio',
+        'Graba Tu Argumentación',
+        'Crea un episodio de podcast argumentando sobre la importancia del legado de Marie Curie en la ciencia moderna',
+        'Planifica tu guión con: introducción, 3 argumentos principales con evidencias, anticipación de contraargumentos, conclusión. Graba tu podcast (o escribe el guión completo).',
+        'audio_question', 4,
+        '{
+            "scriptPlanning": true,
+            "structuredArguments": true,
+            "recordingOptional": true,
+            "rubricEvaluation": true
+        }'::jsonb,
+        '{
+            "podcastPrompt": "Argumenta: ¿Por qué Marie Curie sigue siendo relevante para la ciencia del siglo XXI?",
+            "structure": {
+                "introduction": "Gancho atractivo + tesis clara (1 min)",
+                "argument1": "Primera razón + evidencias (2 min)",
+                "argument2": "Segunda razón + evidencias (2 min)",
+                "argument3": "Tercera razón + evidencias (2 min)",
+                "counterarguments": "Anticipar objeciones y responder (2 min)",
+                "conclusion": "Resumen + llamado a la reflexión (1 min)"
+            },
+            "suggestedArguments": [
+                "Inspiración para mujeres en STEM",
+                "Fundamentos de medicina nuclear moderna",
+                "Modelo de perseverancia científica",
+                "Primera mujer en ganar Nobel y única en ganarlo en dos disciplinas"
+            ],
+            "evaluationCriteria": {
+                "estructura": 20,
+                "argumentos": 30,
+                "evidencias": 25,
+                "claridad": 15,
+                "creatividad": 10
+            }
+        }'::jsonb,
+        '{"minArgumentos": 3, "evidenciasConcretas": 3, "contraargumentosAbordados": 1}'::jsonb,
+        'advanced', 100, 70,
+        30, 3,
+        ARRAY[
+            'Empieza con un gancho que capture la atención',
+            'Cada argumento debe tener evidencias específicas',
+            'Anticipa objeciones para fortalecer tu posición'
+        ],
+        40, 20,
+        true
+    );
+
+    -- Exercise 3.5: Tribunal de Opiniones
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod3_id,
+        'Tribunal de Opiniones: El Juicio Histórico',
+        'Juzga con Criterio Fundamentado',
+        'Participa como jurado en un caso sobre decisiones históricas de Marie Curie. Evalúa argumentos y emite un veredicto fundamentado',
+        'Lee el caso presentado. Analiza argumentos de la defensa y la acusación. Emite tu veredicto con justificación basada en evidencias.',
+        'peer_review', 5,
+        '{
+            "roleplay": true,
+            "multipleArguments": true,
+            "verdictJustification": true,
+            "evidenceWeight": true
+        }'::jsonb,
+        '{
+            "case": "¿Debió Marie Curie compartir libremente sus descubrimientos sin patentes?",
+            "context": "Marie y Pierre Curie decidieron no patentar el proceso de aislamiento del radio, permitiendo que otros científicos e industrias lo usaran libremente. Esto les costó una fortuna potencial pero aceleró la investigación científica.",
+            "prosecution": {
+                "arguments": [
+                    "La familia Curie vivió en dificultades económicas innecesarias",
+                    "Una patente habría proporcionado recursos para más investigación",
+                    "Su hija Eve tuvo que trabajar para mantener el laboratorio después"
+                ]
+            },
+            "defense": {
+                "arguments": [
+                    "El conocimiento científico debe ser libre y accesible",
+                    "Su decisión aceleró avances médicos que salvaron vidas",
+                    "Mantuvieron sus principios éticos por encima del beneficio personal"
+                ]
+            },
+            "questions": [
+                "¿Qué valores guiaron la decisión de los Curie?",
+                "¿Cuál fue el impacto de su decisión en la ciencia?",
+                "¿Habrías tomado la misma decisión? ¿Por qué?"
+            ]
+        }'::jsonb,
+        '{"verdictJustified": true, "evidencesCited": 3, "ethicalAnalysis": true}'::jsonb,
+        'advanced', 100, 70,
+        25, 3,
+        ARRAY[
+            'No hay una respuesta "correcta" única, pero tu veredicto debe estar bien fundamentado',
+            'Considera tanto los principios éticos como las consecuencias prácticas',
+            'Cita evidencias específicas para apoyar tu posición'
+        ],
+        45, 22,
+        true
+    );
+
+    RAISE NOTICE '✓ Module 3 (Comprensión Crítica) created with 5 exercises';
+END $$;
+
+-- ============================================================================
+-- MODULE 4: TEXTOS DIGITALES
+-- 9 exercises: verificador_fakenews, quiz_tiktok, navegacion_hipertextual, analisis_memes,
+-- infografia_interactiva, email_formal, chat_literario, ensayo_argumentativo, resena_critica
+-- ============================================================================
+
+INSERT INTO educational_content.modules (
+    title, subtitle, description, summary,
+    order_index, module_code,
+    difficulty_level, grade_levels, subjects,
+    estimated_duration_minutes, estimated_sessions,
+    learning_objectives, competencies, skills_developed,
+    maya_rank_required, xp_reward, ml_coins_reward,
+    status, is_published, published_at
+) VALUES (
+    'Textos Digitales y Multimodales',
+    'Navega el Mundo Digital de la Información',
+    'Desarrolla competencias para comprender, analizar y crear textos en formatos digitales modernos, desde verificación de noticias hasta producción de contenido multimodal.',
+    'Módulo especializado en literacidad digital con 9 mecánicas: verificación de fake news, análisis de redes sociales, navegación hipertextual, comprensión de memes, infografías, comunicación formal y producción textual.',
+    4, 'MOD-04-DIGITAL',
+    'intermediate', ARRAY['7', '8', '9'], ARRAY['Tecnología', 'Comunicación', 'Literacidad Digital'],
+    240, 8,
+    ARRAY[
+        'Identificar y verificar información falsa en medios digitales',
+        'Comprender textos multimodales y recursos visuales',
+        'Navegar y sintetizar información hipertextual',
+        'Analizar críticamente contenido de redes sociales',
+        'Producir textos digitales formales e informales'
+    ],
+    ARRAY[
+        'Literacidad digital avanzada',
+        'Verificación de información',
+        'Comunicación digital efectiva',
+        'Pensamiento crítico en medios digitales'
+    ],
+    ARRAY[
+        'Fact-checking y verificación',
+        'Análisis de contenido visual',
+        'Navegación hipertextual',
+        'Escritura digital formal',
+        'Comunicación multimodal'
+    ],
+    'batab', 180, 90,
+    'published', true, gamilit.now_mexico()
+);
+
+-- Get Module 4 ID
+DO $$
+DECLARE
+    mod4_id UUID;
+BEGIN
+    SELECT id INTO mod4_id FROM educational_content.modules WHERE module_code = 'MOD-04-DIGITAL';
+
+    -- Exercise 4.1: Verificador de Fake News
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod4_id,
+        'Verificador de Fake News: Marie Curie en Internet',
+        'Distingue Hechos de Ficción',
+        'Analiza artículos sobre Marie Curie publicados en internet. Identifica afirmaciones falsas y verifica información con fuentes confiables',
+        'Lee cada artículo. Selecciona las afirmaciones que te parecen sospechosas. Usa las herramientas de verificación para comprobar los hechos.',
+        'infografia_interactiva', 1,
+        '{
+            "factCheckTools": true,
+            "sourceVerification": true,
+            "claimExtraction": true,
+            "confidenceScoring": true
+        }'::jsonb,
+        '{
+            "articles": [
+                {
+                    "id": "art1",
+                    "title": "Marie Curie: La científica que ganó 3 Premios Nobel",
+                    "source": "Blog de ciencia popular",
+                    "claims": [
+                        {
+                            "text": "Marie Curie ganó 3 Premios Nobel",
+                            "verdict": "false",
+                            "truth": "Ganó 2 Premios Nobel (Física 1903, Química 1911)",
+                            "sources": ["Nobel Prize official website", "Biografías académicas"]
+                        },
+                        {
+                            "text": "Descubrió el radio y el polonio",
+                            "verdict": "true",
+                            "sources": ["Publicaciones científicas de 1898"]
+                        },
+                        {
+                            "text": "Fue la primera mujer en enseñar en la Sorbona",
+                            "verdict": "true",
+                            "sources": ["Registros de la Universidad de París"]
+                        }
+                    ]
+                }
+            ],
+            "verificationTools": [
+                "Wikipedia (verificar consenso científico)",
+                "Sitio oficial Premio Nobel",
+                "Google Scholar (publicaciones académicas)",
+                "Snopes (verificador de hechos)"
+            ]
+        }'::jsonb,
+        '{"claimsVerified": 3, "accuracyRate": 0.9}'::jsonb,
+        'intermediate', 100, 70,
+        20, 3,
+        ARRAY[
+            'Verifica cifras específicas con fuentes oficiales',
+            'Las afirmaciones extraordinarias requieren evidencia extraordinaria',
+            'Compara múltiples fuentes confiables'
+        ],
+        30, 15,
+        true
+    );
+
+    -- Exercise 4.2: Quiz TikTok Style
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod4_id,
+        'Quiz TikTok: Datos Rápidos de Marie Curie',
+        'Responde en 10 Segundos',
+        'Preguntas rápidas estilo TikTok sobre Marie Curie. Tienes 10 segundos por pregunta. ¡Piensa rápido!',
+        'Lee la pregunta y las opciones. Tienes 10 segundos para responder. Desliza para la siguiente pregunta.',
+        'verdadero_falso', 2,
+        '{
+            "timeLimit": 10,
+            "swipeInterface": true,
+            "quickFeedback": true,
+            "sharable": true
+        }'::jsonb,
+        '{
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "¿En qué ciudad nació Marie Curie?",
+                    "options": ["París", "Varsovia", "Berlín", "Londres"],
+                    "correct": 1,
+                    "timeLimit": 10,
+                    "visual": "Map of Europe"
+                },
+                {
+                    "id": "q2",
+                    "text": "¿Cuántos Premios Nobel ganó Marie Curie?",
+                    "options": ["1", "2", "3", "4"],
+                    "correct": 1,
+                    "timeLimit": 10,
+                    "visual": "Nobel medal icons"
+                },
+                {
+                    "id": "q3",
+                    "text": "¿Qué elemento químico nombró por su país?",
+                    "options": ["Radio", "Curio", "Polonio", "Francio"],
+                    "correct": 2,
+                    "timeLimit": 10,
+                    "visual": "Periodic table"
+                }
+            ]
+        }'::jsonb,
+        '{"correctAnswers": [1, 1, 2], "totalQuestions": 3}'::jsonb,
+        'easy', 100, 70,
+        5, 5,
+        ARRAY[
+            'Marie Curie era polaca',
+            'Fue la primera persona en ganar dos Nobeles',
+            'Polonia se llama "Polska" en polaco'
+        ],
+        15, 8,
+        true
+    );
+
+    -- Exercise 4.3: Navegación Hipertextual
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod4_id,
+        'Navegación Hipertextual: Explora la Red de Conocimiento',
+        'Sigue los Enlaces Relevantes',
+        'Navega a través de un artículo web sobre Marie Curie. Sigue los hipervínculos correctos para encontrar información específica',
+        'Lee la pregunta de investigación. Navega por el artículo haciendo clic en los enlaces relevantes. Encuentra la información solicitada.',
+        'map_interaction', 3,
+        '{
+            "hyperlinks": true,
+            "pathTracking": true,
+            "informationSynthesis": true
+        }'::jsonb,
+        '{
+            "researchQuestion": "¿Qué experimentos realizó Marie Curie para aislar el radio?",
+            "mainArticle": {
+                "title": "Marie Curie: Pionera de la Radiactividad",
+                "paragraphs": [
+                    "Marie Curie revolucionó la ciencia con sus <link to=radiactividad>descubrimientos en radiactividad</link>...",
+                    "Trabajó intensamente en el <link to=aislamiento>aislamiento de elementos radiactivos</link>..."
+                ],
+                "links": [
+                    {
+                        "text": "radiactividad",
+                        "relevance": "high",
+                        "leadsTo": "Historia de la radiactividad"
+                    },
+                    {
+                        "text": "aislamiento",
+                        "relevance": "very high",
+                        "leadsTo": "Proceso de aislamiento del radio"
+                    }
+                ]
+            },
+            "optimalPath": ["mainArticle", "aislamiento", "proceso experimental"]
+        }'::jsonb,
+        '{"informationFound": true, "pathEfficiency": 0.8, "relevantLinks": 3}'::jsonb,
+        'intermediate', 100, 70,
+        15, 3,
+        ARRAY[
+            'Lee la pregunta antes de empezar a navegar',
+            'No todos los enlaces son igualmente relevantes',
+            'Sintetiza información de múltiples páginas'
+        ],
+        25, 12,
+        true
+    );
+
+    -- Exercise 4.4: Análisis de Memes
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod4_id,
+        'Análisis de Memes: Comprensión Visual-Textual',
+        'Decodifica el Mensaje del Meme',
+        'Analiza memes sobre Marie Curie. Identifica el mensaje, referencias culturales y humor implícito',
+        'Observa cada meme cuidadosamente. Identifica: el formato utilizado, el mensaje principal, referencias culturales y por qué es gracioso.',
+        'image_selection', 4,
+        '{
+            "visualAnalysis": true,
+            "culturalReferences": true,
+            "humorDecoding": true
+        }'::jsonb,
+        '{
+            "memes": [
+                {
+                    "id": "meme1",
+                    "imageUrl": "/memes/marie-curie-glowing.jpg",
+                    "format": "Drake Hotline Bling",
+                    "topText": "Protección contra radiación",
+                    "bottomText": "Seguir experimentando sin protección",
+                    "analysis": {
+                        "mainMessage": "Marie Curie no usaba protección contra radiación",
+                        "humorType": "Ironía histórica",
+                        "culturalReference": "Formato de meme popular 'Drake'",
+                        "historicalAccuracy": "Alta - realmente no usaban protección adecuada",
+                        "implication": "Contraste entre conocimiento actual y pasado"
+                    }
+                }
+            ],
+            "questions": [
+                "¿Cuál es el mensaje principal del meme?",
+                "¿Qué formato de meme se utiliza?",
+                "¿Es históricamente exacto?",
+                "¿Por qué es gracioso/irónico?"
+            ]
+        }'::jsonb,
+        '{"messagesIdentified": 1, "referencesRecognized": 1, "accuracyEvaluated": true}'::jsonb,
+        'intermediate', 100, 70,
+        12, 3,
+        ARRAY[
+            'Los memes combinan imagen y texto para crear significado',
+            'El humor a menudo viene de la ironía o el contraste',
+            'Conocer el contexto histórico ayuda a entender el meme'
+        ],
+        20, 10,
+        true
+    );
+
+    -- Exercise 4.5: Infografía Interactiva
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod4_id,
+        'Infografía Interactiva: Descubrimientos de Marie Curie',
+        'Extrae Información Visual',
+        'Explora una infografía interactiva sobre los descubrimientos de Marie Curie. Responde preguntas basándote en la información visual',
+        'Haz clic en las diferentes secciones de la infografía. Examina gráficos, iconos y datos. Responde las preguntas de comprensión.',
+        'infografia_interactiva', 5,
+        '{
+            "interactiveElements": true,
+            "dataVisualization": true,
+            "clickableRegions": true
+        }'::jsonb,
+        '{
+            "infographic": {
+                "title": "Marie Curie: 150 Años de Legado Científico",
+                "sections": [
+                    {
+                        "id": "timeline",
+                        "type": "visual timeline",
+                        "data": "1867-1934: Principales hitos de su vida"
+                    },
+                    {
+                        "id": "discoveries",
+                        "type": "icon grid",
+                        "data": "Radio, Polonio, Radioactividad"
+                    },
+                    {
+                        "id": "impact",
+                        "type": "flowchart",
+                        "data": "Sus descubrimientos → Medicina nuclear → Tratamientos de cáncer"
+                    }
+                ],
+                "questions": [
+                    {
+                        "q": "¿Cuántos años vivió Marie Curie?",
+                        "location": "timeline",
+                        "answer": "67 años"
+                    },
+                    {
+                        "q": "¿Qué aplicación médica surgió de sus descubrimientos?",
+                        "location": "impact",
+                        "answer": "Tratamientos de cáncer / Radioterapia"
+                    }
+                ]
+            }
+        }'::jsonb,
+        '{"questionsAnswered": 2, "sectionsExplored": 3}'::jsonb,
+        'intermediate', 100, 70,
+        15, 3,
+        ARRAY[
+            'Explora cada sección de la infografía antes de responder',
+            'Los íconos y colores tienen significado',
+            'Lee las leyendas y etiquetas cuidadosamente'
+        ],
+        25, 12,
+        true
+    );
+
+    -- Exercise 4.6: Email Formal
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod4_id,
+        'Email Formal: Solicitud de Información Académica',
+        'Redacta Comunicación Profesional',
+        'Escribe un email formal solicitando información sobre archivos históricos de Marie Curie a una universidad',
+        'Sigue la estructura de email formal: saludo, introducción, cuerpo con solicitud clara, cierre cortés, firma. Usa lenguaje profesional.',
+        'diario_interactivo', 6,
+        '{
+            "structureGuide": true,
+            "formalLanguage": true,
+            "templateProvided": false,
+            "rubricBased": true
+        }'::jsonb,
+        '{
+            "prompt": "Eres un estudiante investigando sobre Marie Curie. Escribe un email a la Universidad de París solicitando acceso a documentos históricos de Marie Curie.",
+            "context": "Necesitas: acceso a correspondencia personal, registros de laboratorio, y fotografías de su época en la Sorbona.",
+            "requiredElements": [
+                "Línea de asunto clara y profesional",
+                "Saludo formal apropiado",
+                "Presentación personal breve",
+                "Explicación del propósito de la investigación",
+                "Solicitud específica de documentos",
+                "Agradecimiento anticipado",
+                "Cierre formal",
+                "Firma con datos de contacto"
+            ],
+            "rubric": {
+                "formato": 20,
+                "lenguaje": 25,
+                "claridad": 25,
+                "completitud": 20,
+                "cortesía": 10
+            }
+        }'::jsonb,
+        '{"requiredElementsPresent": 8, "formalTone": true}'::jsonb,
+        'intermediate', 100, 70,
+        20, 3,
+        ARRAY[
+            'Usa "Estimado/a" o "Distinguido/a" en el saludo',
+            'Sé específico sobre qué documentos necesitas',
+            'Explica brevemente por qué necesitas acceso'
+        ],
+        30, 15,
+        true
+    );
+
+    -- Exercise 4.7: Chat Literario
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod4_id,
+        'Chat Literario: Conversación con Marie Curie',
+        'Simula una Conversación Histórica',
+        'Participa en una conversación simulada por chat con Marie Curie. Responde de manera coherente y demuestra comprensión de su vida',
+        'Lee cada mensaje de "Marie". Responde con preguntas relevantes o comentarios que demuestren tu conocimiento de su vida y obra.',
+        'discussion', 7,
+        '{
+            "chatSimulation": true,
+            "characterConsistency": true,
+            "historicalAccuracy": true
+        }'::jsonb,
+        '{
+            "chatLog": [
+                {
+                    "from": "Marie Curie",
+                    "message": "Hola, soy Marie Curie. Acabo de llegar a París para estudiar en la Sorbona. Es muy diferente a Varsovia...",
+                    "timestamp": "1891-11-03",
+                    "expectedResponse": {
+                        "themes": ["interés por sus estudios", "adaptación cultural", "motivación científica"],
+                        "inappropriateTopics": ["premios Nobel (aún no ganados)", "descubrimientos futuros"]
+                    }
+                },
+                {
+                    "from": "Student",
+                    "possibleResponses": [
+                        "¿Qué es lo más difícil de adaptarte a París?",
+                        "¿Qué estudios planeas realizar en la Sorbona?",
+                        "¿Extrañas tu familia en Polonia?"
+                    ]
+                },
+                {
+                    "from": "Marie Curie",
+                    "message": "La física y las matemáticas me apasionan. Planeo estudiar ambas disciplinas intensivamente.",
+                    "timestamp": "1891-11-03"
+                }
+            ],
+            "evaluationCriteria": {
+                "coherenciaHistórica": 30,
+                "relevancia": 25,
+                "profundidad": 25,
+                "naturalidad": 20
+            }
+        }'::jsonb,
+        '{"responsesCoherent": true, "historicallyAccurate": true, "engagingConversation": true}'::jsonb,
+        'intermediate', 100, 70,
+        15, 3,
+        ARRAY[
+            'Mantén coherencia con la época de cada mensaje',
+            'No menciones eventos que aún no han ocurrido',
+            'Haz preguntas que demuestren interés genuino'
+        ],
+        25, 12,
+        true
+    );
+
+    -- Exercise 4.8: Ensayo Argumentativo
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod4_id,
+        'Ensayo Argumentativo: El Legado de Marie Curie',
+        'Escribe un Ensayo Estructurado',
+        'Escribe un ensayo argumentativo sobre la importancia del legado de Marie Curie en la ciencia moderna',
+        'Estructura tu ensayo en: introducción con tesis, 3 párrafos de desarrollo con argumentos y evidencias, conclusión. Usa conectores lógicos.',
+        'diario_interactivo', 8,
+        '{
+            "structureRequired": true,
+            "citationRequired": false,
+            "wordCount": {"min": 400, "max": 600},
+            "rubricEvaluation": true
+        }'::jsonb,
+        '{
+            "prompt": "Argumenta: ¿Por qué Marie Curie es considerada una de las científicas más importantes de la historia?",
+            "guidelines": [
+                "Introduce tu tesis claramente en el primer párrafo",
+                "Presenta al menos 3 argumentos principales",
+                "Apoya cada argumento con ejemplos específicos",
+                "Usa conectores: por lo tanto, además, en consecuencia, sin embargo",
+                "Concluye resumiendo y reforzando tu tesis"
+            ],
+            "suggestedThemes": [
+                "Descubrimientos científicos revolucionarios",
+                "Pionera para mujeres en ciencia",
+                "Impacto en medicina moderna",
+                "Modelo de perseverancia y dedicación"
+            ],
+            "rubric": {
+                "tesis": 15,
+                "argumentos": 30,
+                "evidencias": 25,
+                "estructura": 15,
+                "lenguaje": 15
+            }
+        }'::jsonb,
+        '{"tesisClara": true, "argumentos": 3, "estructura": true}'::jsonb,
+        'advanced', 100, 70,
+        30, 2,
+        ARRAY[
+            'Tu tesis debe ser una afirmación clara y debatible',
+            'Cada párrafo de desarrollo debe tener una idea principal',
+            'Usa ejemplos concretos de la vida de Marie Curie'
+        ],
+        40, 20,
+        true
+    );
+
+    -- Exercise 4.9: Reseña Crítica
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod4_id,
+        'Reseña Crítica: Biografía de Marie Curie',
+        'Evalúa y Critica una Obra',
+        'Escribe una reseña crítica de una biografía sobre Marie Curie, evaluando su calidad, exactitud y valor educativo',
+        'Lee el fragmento de la biografía. Evalúa: exactitud histórica, estilo de escritura, profundidad del análisis, sesgo del autor. Escribe tu reseña.',
+        'peer_review', 9,
+        '{
+            "criticalAnalysis": true,
+            "evaluationCriteria": true,
+            "balancedReview": true
+        }'::jsonb,
+        '{
+            "bookExcerpt": {
+                "title": "Marie Curie: Una Vida Dedicada a la Ciencia",
+                "author": "Dra. Susan Quinn",
+                "year": 1995,
+                "excerpt": "Marie Sklodowska llegó a París en 1891 con determinación férrea y recursos limitados. Su dedicación al estudio era tal que a menudo olvidaba comer..."
+            },
+            "reviewStructure": {
+                "resumen": "Breve descripción de la obra (50-75 palabras)",
+                "fortalezas": "Aspectos positivos bien argumentados",
+                "debilidades": "Áreas de mejora o limitaciones",
+                "evaluacion": "Valoración general con justificación",
+                "recomendacion": "A quién recomendarías este libro"
+            },
+            "evaluationAspects": [
+                "Exactitud histórica",
+                "Estilo de escritura",
+                "Profundidad del análisis",
+                "Objetividad del autor",
+                "Valor educativo"
+            ],
+            "rubric": {
+                "resumen": 15,
+                "analisisCritico": 35,
+                "equilibrio": 20,
+                "argumentacion": 20,
+                "recomendacion": 10
+            }
+        }'::jsonb,
+        '{"fortalezasIdentificadas": 2, "debilidadesIdentificadas": 2, "recomendacionFundamentada": true}'::jsonb,
+        'advanced', 100, 70,
+        25, 2,
+        ARRAY[
+            'Una buena reseña es equilibrada: menciona fortalezas Y debilidades',
+            'Fundamenta tus opiniones con ejemplos del texto',
+            'Sé específico: no digas solo "es bueno", explica POR QUÉ'
+        ],
+        35, 18,
+        true
+    );
+
+    RAISE NOTICE '✓ Module 4 (Textos Digitales) created with 9 exercises';
+END $$;
+
+-- ============================================================================
+-- MODULE 5: PRODUCCIÓN CREATIVA
+-- 3 exercises: diario_multimedia, comic_digital, video_carta
+-- ============================================================================
+
+INSERT INTO educational_content.modules (
+    title, subtitle, description, summary,
+    order_index, module_code,
+    difficulty_level, grade_levels, subjects,
+    estimated_duration_minutes, estimated_sessions,
+    learning_objectives, competencies, skills_developed,
+    maya_rank_required, xp_reward, ml_coins_reward,
+    status, is_published, published_at
+) VALUES (
+    'Producción Creativa Multimodal',
+    'Crea Tu Propio Contenido sobre Marie Curie',
+    'Desarrolla habilidades de producción creativa mediante la creación de contenido multimodal original inspirado en la vida de Marie Curie.',
+    'Módulo de producción creativa con 3 mecánicas avanzadas: diario multimedia, cómic digital y video-carta, enfocadas en la expresión personal y la creatividad.',
+    5, 'MOD-05-CREATIVO',
+    'intermediate', ARRAY['7', '8', '9'], ARRAY['Arte', 'Comunicación', 'Creación Digital'],
+    180, 6,
+    ARRAY[
+        'Crear contenido digital original y creativo',
+        'Integrar múltiples modos de comunicación (texto, imagen, audio, video)',
+        'Expresar ideas de manera personal y auténtica',
+        'Producir narrativas visuales coherentes'
+    ],
+    ARRAY[
+        'Creatividad y expresión',
+        'Producción multimodal',
+        'Narrativa visual',
+        'Competencia digital creativa'
+    ],
+    ARRAY[
+        'Escritura creativa',
+        'Diseño visual',
+        'Producción de video',
+        'Síntesis de información en formato creativo'
+    ],
+    'holcatte', 150, 75,
+    'published', true, gamilit.now_mexico()
+);
+
+-- Get Module 5 ID
+DO $$
+DECLARE
+    mod5_id UUID;
+BEGIN
+    SELECT id INTO mod5_id FROM educational_content.modules WHERE module_code = 'MOD-05-CREATIVO';
+
+    -- Exercise 5.1: Diario Multimedia
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod5_id,
+        'Diario Multimedia: Un Día en la Vida de Marie Curie',
+        'Crea una Entrada de Diario Enriquecida',
+        'Imagina que eres Marie Curie. Crea una entrada de diario multimedia sobre un día importante en tu vida, combinando texto, imágenes y audio',
+        'Selecciona un evento importante. Escribe la entrada desde la perspectiva de Marie. Añade imágenes relacionadas. Opcionalmente, graba una narración.',
+        'file_upload', 1,
+        '{
+            "multimodalIntegration": true,
+            "firstPersonNarrative": true,
+            "historicalAccuracy": true,
+            "mediaUpload": ["text", "image", "audio"]
+        }'::jsonb,
+        '{
+            "promptOptions": [
+                {
+                    "date": "1898-12-26",
+                    "event": "Día del descubrimiento del radio",
+                    "context": "Después de años de trabajo agotador, finalmente has aislado una muestra de radio puro..."
+                },
+                {
+                    "date": "1903-12-10",
+                    "event": "Ceremonia del Premio Nobel",
+                    "context": "Hoy recibiste el Premio Nobel de Física junto a Pierre. Eres la primera mujer en recibir este honor..."
+                },
+                {
+                    "date": "1906-04-20",
+                    "event": "Días después de la muerte de Pierre",
+                    "context": "Pierre ha muerto en un trágico accidente. El dolor es inmenso, pero debes decidir si continuar con la investigación..."
+                }
+            ],
+            "structure": {
+                "salutation": "Querido diario...",
+                "context": "Descripción del momento y lugar",
+                "emotions": "Expresa sentimientos personales",
+                "reflection": "Reflexión sobre el significado del evento",
+                "future": "Pensamientos sobre el futuro"
+            },
+            "mediaRequirements": {
+                "text": "200-400 palabras",
+                "images": "1-3 imágenes relevantes",
+                "audio": "Opcional: narración de 1-2 minutos"
+            },
+            "rubric": {
+                "autenticidad": 25,
+                "profundidadEmocional": 25,
+                "exactitudHistorica": 20,
+                "integraciónMultimedia": 20,
+                "creatividad": 10
+            }
+        }'::jsonb,
+        '{"textWordCount": {"min": 200, "max": 400}, "imagesIncluded": 1, "historicallyCoherent": true}'::jsonb,
+        'intermediate', 100, 70,
+        40, 2,
+        ARRAY[
+            'Investiga el evento histórico antes de escribir',
+            'Escribe en primera persona como si fueras Marie',
+            'Expresa emociones de manera auténtica'
+        ],
+        50, 25,
+        true
+    );
+
+    -- Exercise 5.2: Cómic Digital
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod5_id,
+        'Cómic Digital: El Descubrimiento del Radio',
+        'Narra Visualmente una Historia',
+        'Crea un cómic de 4-6 viñetas narrando el descubrimiento del radio por Marie Curie',
+        'Planifica tu historia en viñetas. Crea o selecciona imágenes. Añade diálogos y narración. Asegúrate de que la secuencia sea clara.',
+        'infografia_interactiva', 2,
+        '{
+            "panelCreation": true,
+            "sequentialNarrative": true,
+            "dialogueBubbles": true,
+            "visualStory": true
+        }'::jsonb,
+        '{
+            "comicPrompt": "Narra el momento del descubrimiento del radio: desde la observación inicial hasta la confirmación del nuevo elemento",
+            "panelRequirements": {
+                "minPanels": 4,
+                "maxPanels": 6,
+                "requiredElements": [
+                    "Viñeta 1: Marie en el laboratorio observando radiación anómala",
+                    "Viñeta 2: Procesamiento de toneladas de pechblenda",
+                    "Viñeta 3: El momento del descubrimiento",
+                    "Viñeta 4: Confirmación y emoción del descubrimiento"
+                ]
+            },
+            "narrativeElements": {
+                "characterDialogue": "Diálogos entre Marie y Pierre o pensamientos internos",
+                "narrationBoxes": "Texto descriptivo de contexto",
+                "soundEffects": "Efectos visuales de texto (opcional)",
+                "visualSymbols": "Símbolos para representar radiación, elementos químicos"
+            },
+            "technicalAspects": {
+                "panelLayout": "Tradicional, grid, o experimental",
+                "colorPalette": "Monocromático, limitado, o full color",
+                "artStyle": "Realista, caricatura, manga, o abstracto"
+            },
+            "rubric": {
+                "narrativa": 30,
+                "secuenciaVisual": 25,
+                "dialogos": 20,
+                "creatividad": 15,
+                "exactitudHistorica": 10
+            }
+        }'::jsonb,
+        '{"panelsCreated": 4, "narrativeCoherent": true, "visuallyEngaging": true}'::jsonb,
+        'intermediate', 100, 70,
+        50, 2,
+        ARRAY[
+            'Planifica tu historia antes de crear las viñetas',
+            'Usa los diálogos para revelar personalidad y emociones',
+            'La secuencia visual debe contar la historia claramente'
+        ],
+        50, 25,
+        true
+    );
+
+    -- Exercise 5.3: Video-Carta
+    INSERT INTO educational_content.exercises (
+        module_id, title, subtitle, description, instructions,
+        exercise_type, order_index,
+        config, content, solution,
+        difficulty_level, max_points, passing_score,
+        estimated_time_minutes, max_attempts,
+        hints, xp_reward, ml_coins_reward,
+        is_active
+    ) VALUES (
+        mod5_id,
+        'Video-Carta: Mensaje de Marie Curie al Futuro',
+        'Graba un Mensaje en Video',
+        'Crea un video (o guión detallado) donde Marie Curie envía un mensaje a las futuras generaciones de científicos',
+        'Imagina que Marie Curie puede enviar un mensaje video al futuro. Escribe el guión o graba el video (1-2 minutos). Incluye: presentación, mensaje principal, consejos, reflexión final.',
+        'video_question', 3,
+        '{
+            "videoRecording": true,
+            "scriptAlternative": true,
+            "durationLimit": 120,
+            "characterRole": "Marie Curie"
+        }'::jsonb,
+        '{
+            "videoPrompt": "Eres Marie Curie en 1925. Has vivido una vida extraordinaria llena de descubrimientos, triunfos y tragedias. Graba un mensaje para los científicos del siglo XXI.",
+            "structure": {
+                "introduccion": {
+                    "duration": "15-20 segundos",
+                    "content": "Presentación personal y contexto histórico"
+                },
+                "mensajePrincipal": {
+                    "duration": "40-50 segundos",
+                    "content": "Reflexiones sobre la ciencia, la perseverancia, el papel de la mujer en la ciencia"
+                },
+                "consejos": {
+                    "duration": "30-40 segundos",
+                    "content": "Consejos prácticos para jóvenes científicos"
+                },
+                "cierre": {
+                    "duration": "10-15 segundos",
+                    "content": "Reflexión final inspiradora"
+                }
+            },
+            "suggestedThemes": [
+                "La importancia de la curiosidad científica",
+                "Perseverancia ante obstáculos",
+                "Ética en la investigación científica",
+                "El papel de la mujer en STEM",
+                "Equilibrio entre ciencia y humanidad"
+            ],
+            "productionElements": {
+                "setting": "Sugerido: laboratorio o biblioteca",
+                "attire": "Vestimenta de época (opcional)",
+                "props": "Elementos científicos (opcional)",
+                "tone": "Reflexivo, inspirador, auténtico"
+            },
+            "rubric": {
+                "autenticidadPersonaje": 25,
+                "profundidadMensaje": 30,
+                "estructura": 20,
+                "presentacion": 15,
+                "impactoEmocional": 10
+            }
+        }'::jsonb,
+        '{"scriptComplete": true, "structureFollowed": true, "themesAddressed": 3}'::jsonb,
+        'advanced', 100, 70,
+        60, 2,
+        ARRAY[
+            'Investiga citas reales de Marie Curie para inspirarte',
+            'Habla desde el corazón, como lo haría Marie',
+            'Balancea logros personales con mensajes universales'
+        ],
+        50, 25,
+        true
+    );
+
+    RAISE NOTICE '✓ Module 5 (Producción Creativa) created with 3 exercises';
+END $$;
+
+-- ============================================================================
+-- MODULE 6-8: MARIE CURIE STORY (Placeholder for content)
+-- ============================================================================
+
+-- Module 6: Marie Curie - Primeros Años
+INSERT INTO educational_content.modules (
+    title, subtitle, description, summary,
+    order_index, module_code,
+    difficulty_level, grade_levels, subjects,
+    estimated_duration_minutes, estimated_sessions,
+    learning_objectives, competencies, skills_developed,
+    xp_reward, ml_coins_reward,
+    status, is_published, published_at
+) VALUES (
+    'Marie Curie: Primeros Años',
+    'La Infancia y Juventud en Polonia',
+    'Conoce los años formativos de Marie Curie en Varsovia, su familia, educación temprana y el contexto histórico de la Polonia ocupada.',
+    'Módulo narrativo sobre los primeros años de Marie Sklodowska en Polonia, sus desafíos educativos y su determinación por estudiar ciencias.',
+    6, 'MOD-06-MARIE-INFANCIA',
+    'beginner', ARRAY['6', '7', '8'], ARRAY['Historia', 'Biografía'],
+    90, 3,
+    ARRAY[
+        'Conocer el contexto familiar y social de Marie Curie',
+        'Comprender los obstáculos para la educación de mujeres en el siglo XIX',
+        'Identificar los factores que influyeron en su vocación científica'
+    ],
+    ARRAY[
+        'Comprensión histórica',
+        'Empatía y perspectiva histórica',
+        'Análisis biográfico'
+    ],
+    ARRAY[
+        'Lectura biográfica',
+        'Contextualización histórica',
+        'Análisis de motivaciones personales'
+    ],
+    100, 50,
+    'published', true, gamilit.now_mexico()
+);
+
+-- Module 7: Marie Curie - Descubrimientos
+INSERT INTO educational_content.modules (
+    title, subtitle, description, summary,
+    order_index, module_code,
+    difficulty_level, grade_levels, subjects,
+    estimated_duration_minutes, estimated_sessions,
+    learning_objectives, competencies, skills_developed,
+    xp_reward, ml_coins_reward,
+    status, is_published, published_at
+) VALUES (
+    'Marie Curie: Descubrimientos Científicos',
+    'Radio, Polonio y Radioactividad',
+    'Explora los descubrimientos revolucionarios de Marie Curie: el radio, el polonio y el fenómeno de la radioactividad.',
+    'Módulo científico que detalla los descubrimientos de Marie Curie, su método científico y el impacto de sus hallazgos.',
+    7, 'MOD-07-MARIE-DESCUBRIMIENTOS',
+    'intermediate', ARRAY['7', '8', '9'], ARRAY['Ciencias', 'Física', 'Química'],
+    120, 4,
+    ARRAY[
+        'Comprender los descubrimientos científicos de Marie Curie',
+        'Entender el método científico aplicado a sus investigaciones',
+        'Valorar el impacto de la radioactividad en la ciencia moderna'
+    ],
+    ARRAY[
+        'Pensamiento científico',
+        'Comprensión de conceptos físicos y químicos',
+        'Análisis de proceso de investigación'
+    ],
+    ARRAY[
+        'Método científico',
+        'Comprensión de radioactividad',
+        'Análisis de investigación experimental'
+    ],
+    150, 75,
+    'published', true, gamilit.now_mexico()
+);
+
+-- Module 8: Marie Curie - Legado
+INSERT INTO educational_content.modules (
+    title, subtitle, description, summary,
+    order_index, module_code,
+    difficulty_level, grade_levels, subjects,
+    estimated_duration_minutes, estimated_sessions,
+    learning_objectives, competencies, skills_developed,
+    xp_reward, ml_coins_reward,
+    status, is_published, published_at
+) VALUES (
+    'Marie Curie: Legado e Impacto',
+    'Su Influencia en la Ciencia y la Sociedad',
+    'Analiza el legado duradero de Marie Curie: su impacto en la ciencia, la medicina, la igualdad de género y la inspiración para futuras generaciones.',
+    'Módulo de reflexión sobre el legado de Marie Curie, sus contribuciones a la ciencia moderna y su papel como modelo a seguir.',
+    8, 'MOD-08-MARIE-LEGADO',
+    'intermediate', ARRAY['7', '8', '9'], ARRAY['Historia', 'Sociedad', 'Ética'],
+    100, 4,
+    ARRAY[
+        'Evaluar el impacto de Marie Curie en la ciencia moderna',
+        'Comprender su influencia como pionera para mujeres en STEM',
+        'Reflexionar sobre la ética científica y el sacrificio personal'
+    ],
+    ARRAY[
+        'Pensamiento crítico',
+        'Análisis de impacto histórico',
+        'Reflexión ética'
+    ],
+    ARRAY[
+        'Análisis de legado histórico',
+        'Evaluación de impacto social',
+        'Reflexión sobre modelos a seguir'
+    ],
+    150, 75,
+    'published', true, gamilit.now_mexico()
+);
+
+COMMIT;
+
+-- ============================================================================
+-- VERIFICATION & SUMMARY
+-- ============================================================================
+DO $$
+DECLARE
+    modules_count INTEGER;
+    exercises_count INTEGER;
+    mod1_ex INTEGER;
+    mod2_ex INTEGER;
+    mod3_ex INTEGER;
+    mod4_ex INTEGER;
+    mod5_ex INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO modules_count FROM educational_content.modules;
+    SELECT COUNT(*) INTO exercises_count FROM educational_content.exercises;
+
+    SELECT COUNT(*) INTO mod1_ex FROM educational_content.exercises e
+    JOIN educational_content.modules m ON e.module_id = m.id
+    WHERE m.module_code = 'MOD-01-LITERAL';
+
+    SELECT COUNT(*) INTO mod2_ex FROM educational_content.exercises e
+    JOIN educational_content.modules m ON e.module_id = m.id
+    WHERE m.module_code = 'MOD-02-INFERENCIAL';
+
+    SELECT COUNT(*) INTO mod3_ex FROM educational_content.exercises e
+    JOIN educational_content.modules m ON e.module_id = m.id
+    WHERE m.module_code = 'MOD-03-CRITICA';
+
+    SELECT COUNT(*) INTO mod4_ex FROM educational_content.exercises e
+    JOIN educational_content.modules m ON e.module_id = m.id
+    WHERE m.module_code = 'MOD-04-DIGITAL';
+
+    SELECT COUNT(*) INTO mod5_ex FROM educational_content.exercises e
+    JOIN educational_content.modules m ON e.module_id = m.id
+    WHERE m.module_code = 'MOD-05-CREATIVO';
+
+    RAISE NOTICE '';
+    RAISE NOTICE '========================================';
+    RAISE NOTICE 'EDUCATIONAL MODULES SEED COMPLETED';
+    RAISE NOTICE '========================================';
+    RAISE NOTICE '';
+    RAISE NOTICE 'Total Modules Created: %', modules_count;
+    RAISE NOTICE 'Total Exercises Created: %', exercises_count;
+    RAISE NOTICE '';
+    RAISE NOTICE 'Exercises by Module:';
+    RAISE NOTICE '  - Module 1 (Comprensión Literal): % exercises', mod1_ex;
+    RAISE NOTICE '  - Module 2 (Comprensión Inferencial): % exercises', mod2_ex;
+    RAISE NOTICE '  - Module 3 (Comprensión Crítica): % exercises', mod3_ex;
+    RAISE NOTICE '  - Module 4 (Textos Digitales): % exercises', mod4_ex;
+    RAISE NOTICE '  - Module 5 (Producción Creativa): % exercises', mod5_ex;
+    RAISE NOTICE '  - Modules 6-8 (Marie Curie Story): 0 exercises (narrative modules)';
+    RAISE NOTICE '';
+    RAISE NOTICE 'Exercise Types Distribution:';
+
+    FOR exercise_type IN
+        SELECT e.exercise_type, COUNT(*) as count
+        FROM educational_content.exercises e
+        GROUP BY e.exercise_type
+        ORDER BY count DESC
+    LOOP
+        RAISE NOTICE '  - %: % exercises', exercise_type.exercise_type, exercise_type.count;
+    END LOOP;
+
+    RAISE NOTICE '';
+    RAISE NOTICE 'Status Summary:';
+    RAISE NOTICE '  - All modules: PUBLISHED';
+    RAISE NOTICE '  - All exercises: ACTIVE';
+    RAISE NOTICE '';
+    RAISE NOTICE '========================================';
+END $$;
