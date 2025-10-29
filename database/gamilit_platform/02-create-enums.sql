@@ -28,6 +28,16 @@ CREATE TYPE public.maya_rank AS ENUM (
 
 COMMENT ON TYPE public.maya_rank IS 'Rangos jerárquicos mayas: NACOM (máximo), BATAB, HOLCATTE, GUERRERO, MERCENARIO (inicial)';
 
+-- User status
+CREATE TYPE public.user_status AS ENUM (
+    'active',
+    'inactive',
+    'suspended',
+    'deleted'
+);
+
+COMMENT ON TYPE public.user_status IS 'Estados posibles de un usuario en el sistema';
+
 -- ============================================
 -- AUTH MANAGEMENT ENUMS
 -- ============================================
